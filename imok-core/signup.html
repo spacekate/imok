@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>I'm OK! Signup</title>
+
+		{% include "head.html" %}
+
+        <script type="text/javascript" src="/static/js/signup.js"></script>
+
+	</head>
+	<body>	
+
+		{% include "menu.html" %}
+		
+		<div class="content">
+			<h1>Signup</h1>
+			
+			<form onsubmit="return validateForm(this)" enctype="multipart/form-data" id="signupForm" name="new_product" action="saveProduct/" method="POST">
+
+               <table cellpadding="0" cellspacing="0" border="0">
+                   <tr>
+                       <th colspan="2">Your Personal Details</th>
+                   </tr>
+                   <tr>
+                       <td>First name:</td>
+                       <td><input name="firstname" /></td>
+                   </tr>
+                   <tr>
+                       <td>Last name:</td>
+                       <td><input name="lastname" /></td>
+                   </tr>
+                   <tr>
+                       <td>Email:</td>
+                       <td><input name="email" class="email" /></td>
+                   </tr>
+                   <tr>
+                       <td>Choose a password:</td>
+                       <td><input type="password" name="password" /></td>
+                   </tr>
+                   <tr>
+                       <td>Retype password:</td>
+                       <td><input type="password" name="passwordconf" /></td>
+                   </tr>
+
+                   <tr>
+                       <th colspan="2">Your Contact Details</th>
+                   </tr>
+                   <tr>
+                       <td>Home phone:</td>
+                       <td><input name="homephone" class="phone" /></td>
+                   </tr>
+                   <tr>
+                       <td>Work phone:</td>
+                       <td><input name="workphone" class="phone" /></td>
+                   </tr>
+                   <tr>
+                       <td>Mobile:</td>
+                       <td><input name="mobile" class="phone" /></td>
+                   </tr>
+
+                   <tr>
+                       <th colspan="2">People to contact:</th>
+                   </tr>
+                   <tr>
+                       <td colspan="2" id="contactlist"><em>Your contact list is empty</em></td>
+                   </tr>
+                   <tr>
+                       <td>Email:</td>
+                       <td><input name="contactemail" class="email" /></td>
+                   </tr>
+                   <tr>
+                       <td colspan="2"><div class="error" id="contactErrorMsg"></div><input type="button" onclick="addContact(dojo.byId('signupForm'))" value="add this contact" /></td>
+                   </tr>
+               </table>
+
+                <p class="buttons"><button>Continue ></button></p>
+
+            </form>
+		</div>
+
+		{% include "footer.html" %}
+	</body>
+</html>

@@ -1,0 +1,266 @@
+body {
+	margin: 0;
+	padding: 0;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 76%;
+	background: #ECF2F8;
+}
+
+div.topbit {
+	background: #69c;
+}
+div.topbit h1 {
+	background: #2E5C8A;
+}
+div.topbit ul {
+	height: 25px;
+	margin: 0;
+	padding: 3px 5px 0 5px;
+	list-style-type: none;
+}
+div.topbit ul li {
+	margin: 0 3px 0 0;
+	padding: 0 10px;
+	float: left;
+	background: #3D7AB8;
+}
+div.topbit a {
+	height: 25px;
+	font-weight: bold;
+	color: #fff;
+	line-height: 25px;
+	text-decoration: none;
+}
+div.topbit ul li.active {
+	background: #fff;
+}
+div.topbit ul li.active a {
+	color: #3D7AB8;
+}
+div.topbit ul.secondary {
+	margin: -25px 0 0 0;
+	padding: 0 3px;
+	float: right;
+}
+div.topbit ul.secondary li {
+	margin: 0 0 0 3px;
+    background: transparent;
+}
+div.topbit ul.secondary li a {
+    font-size: 0.85em;
+    font-weight: normal;
+}
+
+a {
+	text-decoration: none;
+	color: #2D8659;
+}
+
+h1 {
+    color: #2E5C8A;
+	font-size: 1.7em;
+	font-weight: normal;
+}
+div.topbit h1 {
+	margin: 0;
+	padding: 10px 5px;
+	color: #69c;
+	font-size: 2em;
+}
+h2 {
+	color: #69c;
+    font-size: 1.5em;
+    font-weight: normal;
+}
+h2 a {
+    text-decoration: underline;
+}
+.steps h2 {
+    margin-bottom: 0;
+    line-height: 1.4em;
+    vertical-align: middle;
+}
+.steps h2 span,
+.steps h3 span {
+    color: #ace;
+    font-size: 1.4em;
+    font-weight: bold;
+    vertical-align: middle;
+}
+.steps h3 span {
+    color: #4482C1;
+}
+h3 {
+    color: #34699D;
+    font-weight: normal;
+}
+.steps h3 {
+    margin-bottom: 0;
+    margin-left: 25px;
+    line-height: 1.4em;
+    vertical-align: middle;
+}
+
+/**** content styles ****/
+div.content {
+    width: 680px;
+    padding: 10px 5%;
+    margin: 0 15% 0 0;
+    background: #fff;
+
+}
+
+.steps p {
+    margin: 0 0 0.5em 25px;
+}
+.steps .steps p,
+.steps .steps ul {
+    margin-left: 45px;
+}
+
+.error {
+	color: #c00;
+}
+ul.error {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+ul.error li {
+	margin-top: 2px;
+}
+.note {
+	color: #666;
+	font-size: 0.9em;
+}
+
+div.footer {
+    margin: 0;
+    padding: 0;
+    font-size: 5px;
+    line-height: 5px;
+    background: #2E5C8A;
+}
+
+/**** generic list styles ****/
+li {
+    padding-bottom: 0.5em;
+}
+
+/**** table styles ****/
+table {
+	margin: 0;
+}
+table th, table td {
+	padding: 1px 8px;
+	line-height: 1.8em;
+	vertical-align: middle;
+}
+table input, table select, table textarea {
+	font-size: 1em;
+}
+table th {
+	color: #3D7AB8;
+	font-weight: normal;
+	text-align: left;
+}
+table td {
+	background: #ECF2F8;
+	border-bottom: 3px solid #fff;
+}
+table td.action {
+	text-align: center;
+	background: #C0D4E8;
+	border-left: 1px solid #fff;
+}
+table td.active {
+	background: #3D7AB8;
+}
+table td button {
+	color: #2E5C8A;
+	font-size: 1em;
+	background: transparent;
+	border: none;
+}
+div table td.active a,
+	div table td.active button {
+	color: #fff;
+}
+table tr.new td {
+	background: #F2F8EC;
+}
+table tr.new td.action {
+	background: #D9EAC8;
+}
+table tr.new td.active {
+	background: #99CC66;
+}
+table tr.new a, table tr.new button {
+	color: #206020;
+}
+table.problem tr th {
+	color: #993333;
+}
+table.problem tr td {
+	background: #F8ECEC;
+}
+table.problem tr td.action {
+	background: #ECC7C6;
+}
+table.problem tr td.active,
+table td.activecancel {
+	background: #CC6666;
+}
+table.problem td a, table.problem td button,
+table td.cancel a {
+	color: #993333;
+}
+table tr.new td.cancel {
+	background: #ECC7C6;
+}
+table tr td.cancel a {
+	color: #993333;
+}
+table tr.new td.activecancel {
+	background: #D27979;
+}
+table tr td.activecancel a {
+	color: #fff;
+}
+table tr.editable td {
+	background: #F2E6D9;
+}
+table tr.editable td.action {
+	background: #E2C8AB;
+}
+table tr.editable a, table tr.editable button {
+	color: #604020;
+}
+table tr.editable td.active {
+	background: #CC9966;
+}
+table tr.spacer th {
+	line-height: 1em;
+}
+table td.checkbox, table th.checkbox { text-align: center; }
+
+/**** form styles ****/
+input, select { vertical-align: middle; }
+input.url { width: 120px; }
+input.title { width: 300px; }
+input.anyliticsid { width: 180px; }
+input.paypalid { width: 300px; }
+input.name { width: 200px; }
+input.price { width: 50px; }
+
+/**** list styles ****/
+ul.links li a { color: #3E7DBB; }
+ul.links li a:hover, ul.links li a:hover:visited { color: #BB7D3E; }
+ul.links li a:visited { color: #592D86; }
+
+ul.links {
+	list-style-type: none;
+}
+ul.links li {
+	margin-bottom: 1em;
+}
