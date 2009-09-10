@@ -4,8 +4,22 @@ runtime: python
 api_version: 1
 
 handlers:
+- url: /console/static
+  static_dir: console/app/view/static
+
+- url: /console.*
+  script: console/app/console.py
+
 - url: /static
   static_dir: static
+
+- url: /signup.html
+  script: main.py
+  login: required
+
+- url: /account.html
+  script: main.py
+  login: required
 
 - url: .*
   script: main.py

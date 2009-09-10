@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>I'm OK!</title>
+
+		{% include "fragments/head.html" %}
+
+	</head>
+	<body>
+
+		{% include "fragments/menu.html" %}
+
+        <div class="content">
+            <h1>Last checkin {{  account.lastNotificationDate|timesince }} ago.</h1>
+
+            <a href="/notify">I'm Ok</a>
+
+        </div>
+
+		{% include "fragments/footer.html" %}
+
+	</body>
