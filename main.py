@@ -19,14 +19,9 @@ from google.appengine.api import users
 from google.appengine.api import urlfetch
 from google.appengine.api import mail
 
-class Customer(db.Model):
-    account = db.UserProperty()
-    firstName = db.StringProperty()
-    lastName = db.StringProperty()
-    email = db.EmailProperty()
-    creationDate = db.DateTimeProperty(auto_now_add=True)
-    lastNotificationDate = db.DateTimeProperty()
+from models import *
 
+### Base Classes
 class ReqHandler(webapp.RequestHandler):
     def getAccount(self):
         account = Customer.gql("WHERE account = :1 LIMIT 1",
@@ -37,7 +32,8 @@ class ReqHandler(webapp.RequestHandler):
             values['logoutLink'] = users.create_logout_url("/")            
         path = os.path.join(os.path.dirname(__file__),'templates', templateName)
         self.response.out.write(template.render(path, values))
-    
+
+### Save Handlers
 class SignupHandler(webapp.RequestHandler):
     def post(self):
         customer = Customer()
@@ -56,18 +52,33 @@ class NotificationHandler(ReqHandler):
         customer.put()
         self.redirect('/account.html')
 
-
+### Web Handlers
 class AccountHandler(ReqHandler):
     def get(self):
-        values={
-        'account': self.getAccount(),
-        'timeSinceNotification': (datetime.utcnow() - self.getAccount().lastNotificationDate)
-        }
-        self.template('Account.html', values)
+        account = self.getAccount()
+        if (account):
+            values={
+            'account': account,
+            'timeSinceNotification': (datetime.utcnow() - self.getAccount().lastNotificationDate)
+            }
+            self.template('account.html', values)
+        else:
+            self.redirect('/signup.html')
+
 class FrontPageHandler(ReqHandler):
     def get(self):
         if (users.get_current_user()):
             self.redirect('/account.html')
+        else:
+            self.template('index.html', {})
+
+class SignupPageHandler(ReqHandler):
+    def get(self):
+        if (users.get_current_user()):
+            if (self.getAccount()):
+                self.redirect('/account.html')
+            else:
+                self.template('signup.html',{})
         else:
             self.template('index.html', {})
 
@@ -89,6 +100,7 @@ def main():
                   [('/signup/save/', SignupHandler),
                    ('/notify', NotificationHandler),
                    ('/', FrontPageHandler),
+                   ('/signup.html', SignupPageHandler),
                    ('/account.html', AccountHandler),
                    ('.*', FallbackHandler),
                   ]
