@@ -41,14 +41,14 @@ class SignupHandler(webapp.RequestHandler):
         customer.firstName = self.request.get('firstName')
         customer.lastName = self.request.get('lastName')
         customer.email = self.request.get('email')
-        customer.lastNotificationDate=datetime.utcnow()
+        customer.notify()
         customer.put()
         self.redirect('/account.html')
 
 class NotificationHandler(ReqHandler):
     def get(self):
         customer = self.getAccount()
-        customer.lastNotificationDate=datetime.utcnow()
+        customer.notify()
         customer.put()
         self.redirect('/account.html')
 

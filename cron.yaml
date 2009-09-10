@@ -1,0 +1,4 @@
+cron:
+- description: Worker thread
+  url: /worker/
+  schedule: every 5 minutes
