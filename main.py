@@ -24,26 +24,40 @@ from models import *
 ### Base Classes
 class ReqHandler(webapp.RequestHandler):
     def getAccount(self):
-        account = Customer.gql("WHERE account = :1 LIMIT 1",
+        accountQuery = Customer.gql("WHERE account = :1 LIMIT 1",
                                users.get_current_user())
-        return account.get()
+        
+        account = accountQuery.get()
+        if (not account):
+            customer = Customer()
+            customer.account = users.get_current_user()
+            customer.name = customer.account.nickname()
+            customer.email = customer.account.email()
+            customer.notify()
+            customer.put()
+            account=customer
+        return account
+        
     def template(self, templateName, values):
+        self.response.out.write(self.getTemplate(templateName, values))
+
+    def getTemplate(self, templateName, values):
         if (users.get_current_user()):
             values['logoutLink'] = users.create_logout_url("/")            
         path = os.path.join(os.path.dirname(__file__),'templates', templateName)
-        self.response.out.write(template.render(path, values))
+        return (template.render(path, values))
 
 ### Save Handlers
-class SignupHandler(webapp.RequestHandler):
-    def post(self):
-        customer = Customer()
-        customer.account = users.get_current_user()
-        customer.firstName = self.request.get('firstName')
-        customer.lastName = self.request.get('lastName')
-        customer.email = self.request.get('email')
-        customer.notify()
-        customer.put()
-        self.redirect('/account.html')
+#class SignupHandler(webapp.RequestHandler):
+#    def post(self):
+#        customer = Customer()
+#        customer.account = users.get_current_user()
+#        customer.firstName = self.request.get('firstName')
+#        customer.lastName = self.request.get('lastName')
+#        customer.email = self.request.get('email')
+#        customer.notify()
+#        customer.put()
+#        self.redirect('/account.html')
 
 class NotificationHandler(ReqHandler):
     def get(self):
@@ -51,6 +65,22 @@ class NotificationHandler(ReqHandler):
         customer.notify()
         customer.put()
         self.redirect('/account.html')
+
+class DeleteContactHandler(ReqHandler):
+    def get(self):
+        contact_key = self.request.get('contactId')
+        contact= db.get(db.Key(contact_key))
+        contact.delete()
+        self.redirect('/account.html')
+        
+class NewContactHandler(ReqHandler):
+    def get(self):
+        contact = Contact()
+        contact.customer=self.getAccount()
+        contact.email=self.request.get('newContact')
+        contact.put()
+        self.redirect('/account.html')
+        
 
 ### Web Handlers
 class AccountHandler(ReqHandler):
@@ -72,15 +102,15 @@ class FrontPageHandler(ReqHandler):
         else:
             self.template('index.html', {})
 
-class SignupPageHandler(ReqHandler):
-    def get(self):
-        if (users.get_current_user()):
-            if (self.getAccount()):
-                self.redirect('/account.html')
-            else:
-                self.template('signup.html',{})
-        else:
-            self.template('index.html', {})
+#class SignupPageHandler(ReqHandler):
+#    def get(self):
+#        if (users.get_current_user()):
+#            if (self.getAccount()):
+#                self.redirect('/account.html')
+#            else:
+#                self.template('signup.html',{})
+#        else:
+#            self.template('index.html', {})
 
 class FallbackHandler(ReqHandler):
   def get(self):
@@ -97,11 +127,14 @@ class FallbackHandler(ReqHandler):
 
 def main():
   application = webapp.WSGIApplication(
-                  [('/signup/save/', SignupHandler),
+                  [
+                   # ('/signup/save/', SignupHandler),
+                   #('/signup.html', SignupPageHandler),
                    ('/notify', NotificationHandler),
                    ('/', FrontPageHandler),
-                   ('/signup.html', SignupPageHandler),
                    ('/account.html', AccountHandler),
+                   ('/contact/add/', NewContactHandler),
+                   ('/contact/delete/', DeleteContactHandler),
                    ('.*', FallbackHandler),
                   ]
           )

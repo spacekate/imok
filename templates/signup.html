@@ -5,9 +5,19 @@
 
 		{% include "fragments/head.html" %}
 
-        <script type="text/javascript" src="/static/js/signup.js"></script>
+        <script type="text/javascript" src="/static/js/form.js"></script>
+        <script type="text/javascript" src="/static/js/contactlist.js"></script>
 
-	</head>
+        <script type="text.javascript">
+            function validateForm(form) {
+                if (!validateText(this.firstName)) {
+                    
+                }
+                return true;
+            }
+        </script>
+
+    </head>
 	<body>	
 
 		{% include "fragments/menu.html" %}
@@ -15,7 +25,8 @@
 		<div class="content">
 			<h1>Signup</h1>
 			
-			<form onsubmit="return validateForm(this)" enctype="multipart/form-data" id="signupForm" name="new_product" action="/signup/save/" method="POST">
+			<form onsubmit="return validateAll()" enctype="multipart/form-data" id="signupForm" name="new_product" action="/signup/save/" method="POST">
+                <input type="hidden" name="contactlist" />
 
                <table cellpadding="0" cellspacing="0" border="0">
                    <tr>
@@ -62,14 +73,17 @@
                        <th colspan="2">People to contact:</th>
                    </tr>
                    <tr>
-                       <td colspan="2" id="contactlist"><em>Your contact list is empty</em></td>
+                       <td colspan="2">
+                           <div id="contacts"><em>Your contact list is empty</em></div>
+                           <div class="error" id="contactErrorMsg"></div>
+                       </td>
                    </tr>
                    <tr>
                        <td>Email:</td>
-                       <td><input name="contactemail" class="email" /></td>
-                   </tr>
-                   <tr>
-                       <td colspan="2"><div class="error" id="contactErrorMsg"></div><input type="button" onclick="addContact(dojo.byId('signupForm'))" value="add this contact" /></td>
+                       <td>
+                           <input id="contactemail" name="contactemail" class="email" onkeypress="addContactOnReturn(event)" />
+                           <input type="button" name="addcontact" onclick="addContact()" value="add" />
+                       </td>
                    </tr>
                </table>
 

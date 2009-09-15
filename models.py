@@ -8,8 +8,9 @@ from datetime import datetime, timedelta
 ### Models
 class Customer(db.Model):
     account = db.UserProperty()
-    firstName = db.StringProperty()
-    lastName = db.StringProperty()
+    name = db.StringProperty()
+#    firstName = db.StringProperty()
+#    lastName = db.StringProperty()
     email = db.EmailProperty()
     creationDate = db.DateTimeProperty(auto_now_add=True)
     lastNotificationDate = db.DateTimeProperty()
@@ -21,4 +22,5 @@ class Customer(db.Model):
 
 class Contact(db.Model):
     customer=db.ReferenceProperty(Customer)
+    email = db.EmailProperty()
     

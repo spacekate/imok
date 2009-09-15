@@ -1,0 +1,10 @@
+Hi,
+
+We are a little concerned about {{customer.firstName}} {{customer.lastName}}.
+
+They have not checked in with us for {{ customer.lastNotificationDate|timesince }}.
+
+Do you mind checking that they are ok?
+
+thanks
+

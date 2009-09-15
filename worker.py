@@ -20,14 +20,19 @@ from google.appengine.api import urlfetch
 from google.appengine.api import mail
 
 from models import *
+from main import *
 
-class WorkerHandler(webapp.RequestHandler):
+class WorkerHandler(ReqHandler):
     def get(self):
-        idleCustomers = Customer.gql("WHERE notificationTime > :1 ",
+        idleCustomers = Customer.gql("WHERE notificationTime <= :1 ",
                                datetime.utcnow())
         for customer in idleCustomers:
-            self.response.out.write(customer.firstName + "</br>")
+            self.handleIdleCustomer(customer)
         self.response.out.write("worker")
+
+    def handleIdleCustomer(self, customer):        
+        body = self.getTemplate("email/alert_email.txt", {'customer': customer})
+        self.response.out.write(body + "</br>")
 
 
 def main():
