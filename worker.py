@@ -28,11 +28,17 @@ class WorkerHandler(ReqHandler):
                                datetime.utcnow())
         for customer in idleCustomers:
             self.handleIdleCustomer(customer)
-        self.response.out.write("worker")
+        self.response.out.write("worker finished")
 
-    def handleIdleCustomer(self, customer):        
-        body = self.getTemplate("email/alert_email.txt", {'customer': customer})
-        self.response.out.write(body + "</br>")
+    def handleIdleCustomer(self, customer):
+        for contact in customer.contact_set:
+            message=mail.EmailMessage()
+            message.sender='hcurrie@gmail.com'
+            message.to=contact.email
+            message.body=self.getTemplate("email/alert_email.txt", {'customer': customer})
+            self.response.out.write("worker sent email to %s for %s</br>" %(contact.email, customer.email))
+
+        
 
 
 def main():
