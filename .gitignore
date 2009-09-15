@@ -1,0 +1,8 @@
+*.pyc
+.project
+.pydevproject
+*~
+index.yaml
+imok.iml
+imok.ipr
+imok.iws
