@@ -18,7 +18,7 @@ class Customer(db.Model):
 
     def notify(self):
         self.lastNotificationDate = datetime.utcnow()
-        self.notificationTime = self.lastNotificationDate + timedelta(minutes=2) 
+        self.notificationTime = self.lastNotificationDate + timedelta(hours=24) 
 
 class Contact(db.Model):
     customer=db.ReferenceProperty(Customer)
