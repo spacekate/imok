@@ -1,6 +1,6 @@
 Hi,
 
-We are a little concerned about {{customer.firstName}} {{customer.lastName}}.
+We are a little concerned about {{customer.name}}.
 
 They have not checked in with us for {{ customer.lastNotificationDate|timesince }}.
 
