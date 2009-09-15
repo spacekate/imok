@@ -35,7 +35,9 @@ class WorkerHandler(ReqHandler):
             message=mail.EmailMessage()
             message.sender='hcurrie@gmail.com'
             message.to=contact.email
+            message.subject = "[imok] Have you spoken to %s recently?" %(customer.name)
             message.body=self.getTemplate("email/alert_email.txt", {'customer': customer})
+            message.send()
             self.response.out.write("worker sent email to %s for %s</br>" %(contact.email, customer.email))
 
         
