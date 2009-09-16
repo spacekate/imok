@@ -89,7 +89,6 @@ class NewContactHandler(ReqHandler):
         contact.put()
         #self.response.out.write(getJsonContacts())
         self.redirect('/contact/list/')
-        
 
 ### Web Handlers
 class ListContactHandler(ReqHandler):
