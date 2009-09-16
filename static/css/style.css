@@ -130,12 +130,11 @@ div.contactlist {
     float: right;
     width: 260px;
     padding: 0 10px 10px;
+    color: #fff;
     background: #2e5c8a;
 }
 div.contactlist th,
     div.contactlist td {
-    color: #fff;
-    background: transparent;
     border: none;
 }
 
@@ -408,7 +407,7 @@ input.title { width: 300px; }
 input.anyliticsid { width: 180px; }
 input.paypalid { width: 300px; }
 input.name { width: 200px; }
-input.email { width: 200px; }
+input.email { width: 160px; }
 input.price { width: 50px; }
 
 /**** list styles ****/
