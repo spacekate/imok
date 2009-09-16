@@ -11,7 +11,7 @@ body {
 }
 .container .content,
     .container .contactlist {
-    padding-bottom: 2000px;
+    padding-bottom: 2010px;
     margin-bottom: -2000px;
 }
 
@@ -26,16 +26,6 @@ body {
 span.required {
     color: #933;
     font-size: 0.9em;
-}
-
-img.link {
-    cursor: pointer;
-}
-img.delete {
-    color: #c66;
-}
-img.delete:hover {
-    color: #c00;
 }
 
 a {
@@ -143,7 +133,7 @@ div.topbit ul.secondary li a {
 div.contactlist {
     float: right;
     width: 260px;
-    padding: 0 10px 10px;
+    padding: 0 10px 10px 10px;
     background: #ECF2F8;
 }
 div.contactlist th,
@@ -168,7 +158,7 @@ div.content {
 }
 
 .error {
-	color: #c00;
+	color: #c33;
 }
 ul.error {
 	margin: 0;
@@ -196,7 +186,7 @@ table.hasHTMLeditor {
     width: 100%;
 }
 table th, table td {
-	padding: 1px 8px;
+	padding: 1px 2px;
 	vertical-align: middle;
     background: #ECF2F8;
 	border-bottom: 3px solid #fff;
@@ -231,30 +221,26 @@ table td.active {
 	background: #3D7AB8;
 }
 table td button {
-    padding: 3px 0;
-    color: #2E5C8A;
 	font-size: 1em;
-    background: transparent;
-	border: none;
+}
+td.delete {
+    color: #c66;
+    cursor: pointer;
+    text-align: center;
 }
 div table td.active,
     div table td.active a,
 	div table td.active button {
 	color: #fff;
 }
-div table tr td.placeholder {
-    color: #fff;
+div table tr td.placeholder,
+div table tr td.note,
+div table tr td.error {
+    padding: 2px;
     font-size: 0.9em;
     line-height: 1.2em;
     background: transparent;
-}
-div table.hasHTMLeditor tr td.placeholder,
-form table.hasHTMLeditor tr td.note,
-table.hasHTMLeditor tr.problem.highlight td.error {
-    width: 50%;
-}
-div table tr td.placeholder a {
-    color: #fff;
+    border: none;
 }
 table tr.new td {
 	background: #F2F8EC;
@@ -296,14 +282,7 @@ table tr.instruction td img {
 }
 
 /* note */
-form table tr td.note {
-    color: #fff;
-    background: transparent;
-}
-form table tr td.note {
-    border-left: 3px solid #fff;
-    font-size: 0.9em;
-    line-height: 1em;
+div table tr td.note {
     color: #666;
 	background: #ECF2F8;
 }
@@ -312,11 +291,6 @@ form table tr td.note {
 .problem th, .problem td {
 	color: #993333;
 	background: #F8ECEC;
-}
-.problem td.error {
-    font-size: 0.9em;
-    line-height: 1em;
-    border-left: 3px solid #fff;
 }
 .problem td.action {
 	background: #ECC7C6;
@@ -415,6 +389,12 @@ input.name { width: 200px; }
 input.email { width: 160px; }
 input.price { width: 50px; }
 
+input.instructions {
+    color: #999;
+    font-size: 0.9em;
+    font-style: italic;
+}
+
 /**** list styles ****/
 ul.links li a { color: #3E7DBB; }
 ul.links li a:hover, ul.links li a:hover:visited { color: #BB7D3E; }
@@ -430,7 +410,8 @@ ul.links li {
 div.footer {
     margin: 0;
     padding: 0;
-    font-size: 5px;
-    line-height: 5px;
-    background: #2E5C8A;
+    border-top: 8px solid #2E5C8A;
+}
+div.footer p {
+    margin: 1px 0;
 }

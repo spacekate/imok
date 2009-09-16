@@ -1,7 +1,30 @@
 /* on page load */
 dojo.addOnLoad(function() {
     getContactList();
+    addEmailInstructions();
 });
+
+function addEmailInstructions() {
+    var instructionText = 'Enter email address';
+    var newContact = dojo.byId('newContact');
+
+    dojo.addClass(newContact, 'instructions');
+    newContact.value = instructionText;
+
+    dojo.connect(newContact, 'onfocus', function() {
+        if (this.value == instructionText) {
+            dojo.removeClass(this, 'instructions');
+            this.value = '';
+        }
+    });
+
+    dojo.connect(newContact, 'onblur', function() {
+        if (this.value == '') {
+            dojo.addClass(this, 'instructions');
+            this.value = instructionText;
+        }
+    });
+}
 
 function getContactList() {
     dojo.xhrGet({
@@ -56,17 +79,43 @@ function deleteContact(contactId) {
             //do nothing
         }
 	});
+
+    // put focus in email input box
+    dojo.byId('newContact').focus();
 }
 
 function updateContactList(contactJSON) {
-    var contacts = '';
+    var contactlist = dojo.byId('contacts');
+
+    contactlist.innerHTML = '';
 
     for (var i = 0; i < contactJSON.contacts.length; i++) {
-        contacts += '<li>' + contactJSON.contacts[i].email +
-                    ' <img src="" class="delete link" alt="x" title="click to delete this contact" ' +
-                    'onclick="javascript:deleteContact(\'' + contactJSON.contacts[i].key + '\')" /></li>';
+        var newRow = document.createElement('tr');
+        var emailCell = document.createElement('td');
+        var deleteCell = document.createElement('td');
+
+        dojo.addClass(newRow, 'highlightable');
+
+        emailCell.innerHTML = contactJSON.contacts[i].email;
+
+        deleteCell.innerHTML = 'x';
+        dojo.addClass(deleteCell, 'delete');
+        dojo.attr(deleteCell, 'title', 'click to delete this contact');
+        dojo.attr(deleteCell, 'id', contactJSON.contacts[i].key);
+        dojo.connect(deleteCell, "onclick", function() {
+            deleteContact(this.id);
+        });
+        dojo.connect(deleteCell, "onmouseover", function() {
+            dojo.addClass(this.parentNode, "problem");
+        });
+        dojo.connect(deleteCell, "onmouseout", function() {
+            dojo.removeClass(this.parentNode, "problem");
+        });
+
+        dojo.place(newRow, contactlist, 'last');
+        dojo.place(emailCell, newRow, 'last');
+        dojo.place(deleteCell, newRow, 'first');
     }
 
-    dojo.byId('contacts').innerHTML = contacts;
     dojo.byId('contactsMsg').innerHTML = contactJSON.message;
 }

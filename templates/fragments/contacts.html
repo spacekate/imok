@@ -1,9 +1,6 @@
 <div class="contactlist">
 
-    <h2>People to contact:</h2>
-
-    <ul class="contacts" id="contacts"></ul>
-    <div class="error" id="contactsMsg"></div>
+    <h2>My contact list:</h2>
 
     <form name="addContactForm"
           id="addContactForm"
@@ -11,17 +8,26 @@
           action="javascript:addContact(dojo.byId('addContactForm'))">
 
         <table cellpadding="0" cellspacing="0" border="0">
-           <tr class="highlightable">
-               <td>
-                   <input id="newContact" name="newContact" class="email validate" />
-                   <input type="submit" value="add" />
-               </td>
-           </tr>
-            <tr>
-               <td name="newContactComment" class="placeholder">&nbsp;</td>
-               <td name="newContactComment" class="hidden note">Enter an email address and click 'add'</td>
-               <td name="newContactComment" class="hidden error">Please enter a valid email address</td>
-           </tr>
+            <thead id="contacts">
+                
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="2" class="error" id="contactsMsg"></td>
+                </tr>
+            </tbody>
+            <tfoot>
+               <tr class="highlightable">
+                   <td>&nbsp;</td>
+                   <td><input id="newContact" name="newContact" class="email validate" />
+                       <button>add</button></td>
+               </tr>
+                <tr>
+                   <td colspan="2" name="newContactComment" class="placeholder">&nbsp;</td>
+                   <td colspan="2" name="newContactComment" class="hidden note">Enter an email address and click 'add'</td>
+                   <td colspan="2" name="newContactComment" class="hidden error">Please enter a valid email address</td>
+               </tr>
+            </tfoot>
        </table>
     </form>
 </div>

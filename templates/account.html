@@ -26,9 +26,13 @@
 
             <div class="content">
 
-                <h1><button>I'm OK!</button></h1>
+                <form action="/notify">
+                    <h1><button>I'm OK!</button></h1>
+                </form>
 
-                <h2>Last checkin {{  account.lastNotificationDate|timesince }} ago.</h2>
+                <h2>Last checkin {{  account.lastNotificationDate|timesince }} ago</h2>
+
+                <p class="error">This is an alpha service - all of your records will be deleted at random.</p>                
                 
             </div>
         </div>
