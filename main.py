@@ -9,6 +9,7 @@ import wsgiref.handlers
 import logging
 import mimetypes
 import urllib
+import demjson
 
 from datetime import datetime
 
@@ -37,6 +38,12 @@ class ReqHandler(webapp.RequestHandler):
             customer.put()
             account=customer
         return account
+    def getJsonContacts(self):
+        account = self.getAccount()
+        contacts = []
+        for contact in account.contact_set:
+            contacts.append( {'email': contact.email, 'key': str(contact.key())})
+        return(demjson.encode(contacts))
         
     def template(self, templateName, values):
         self.response.out.write(self.getTemplate(templateName, values))
@@ -71,7 +78,8 @@ class DeleteContactHandler(ReqHandler):
         contact_key = self.request.get('contactId')
         contact= db.get(db.Key(contact_key))
         contact.delete()
-        self.redirect('/account.html')
+        #self.response.out.write(getJsonContacts())
+        self.redirect('/contact/list/')
         
 class NewContactHandler(ReqHandler):
     def get(self):
@@ -79,10 +87,15 @@ class NewContactHandler(ReqHandler):
         contact.customer=self.getAccount()
         contact.email=self.request.get('newContact')
         contact.put()
-        self.redirect('/account.html')
+        #self.response.out.write(getJsonContacts())
+        self.redirect('/contact/list/')
         
 
 ### Web Handlers
+class ListContactHandler(ReqHandler):
+    def get(self):
+        self.response.out.write(self.getJsonContacts())
+        
 class AccountHandler(ReqHandler):
     def get(self):
         account = self.getAccount()
@@ -133,6 +146,7 @@ def main():
                    ('/notify', NotificationHandler),
                    ('/', FrontPageHandler),
                    ('/account.html', AccountHandler),
+                   ('/contact/list/', ListContactHandler),
                    ('/contact/add/', NewContactHandler),
                    ('/contact/delete/', DeleteContactHandler),
                    ('.*', FallbackHandler),
