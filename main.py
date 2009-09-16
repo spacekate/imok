@@ -38,14 +38,13 @@ class ReqHandler(webapp.RequestHandler):
             customer.put()
             account=customer
         return account
-    def getJsonContacts(self, message=None):
+    def getJsonContacts(self, message=''):
         account = self.getAccount()
         contacts = []
         for contact in account.contact_set:
             contacts.append( {'email': contact.email, 'key': str(contact.key())})
         result = {'contacts': contacts}
-        if message:
-            result['message'] = message
+        result['message'] = message
         return(demjson.encode(result))
         
     def template(self, templateName, values):
@@ -114,7 +113,7 @@ class NewContactHandler(ReqHandler):
 ### Web Handlers
 class ListContactHandler(ReqHandler):
     def get(self):
-        self.response.out.write(self.getJsonContacts())
+        self.response.out.write(self.getJsonContacts(message=''))
         
 class AccountHandler(ReqHandler):
     def get(self):

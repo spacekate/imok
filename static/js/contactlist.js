@@ -61,11 +61,12 @@ function deleteContact(contactId) {
 function updateContactList(contactJSON) {
     var contacts = '';
 
-    for (var i = 0; i < contactJSON.length; i++) {
-        contacts += '<li>' + contactJSON[i].email +
+    for (var i = 0; i < contactJSON.contacts.length; i++) {
+        contacts += '<li>' + contactJSON.contacts[i].email +
                     ' <img src="" class="delete link" alt="x" title="click to delete this contact" ' +
-                    'onclick="javascript:deleteContact(\'' + contactJSON[i].key + '\')" /></li>';
+                    'onclick="javascript:deleteContact(\'' + contactJSON.contacts[i].key + '\')" /></li>';
     }
 
     dojo.byId('contacts').innerHTML = contacts;
+    dojo.byId('contactsMsg').innerHTML = contactJSON.message;
 }

@@ -129,7 +129,14 @@ div.topbit ul.secondary li a {
 div.contactlist {
     float: right;
     width: 260px;
+    padding: 0 10px 10px;
     background: #2e5c8a;
+}
+div.contactlist th,
+    div.contactlist td {
+    color: #fff;
+    background: transparent;
+    border: none;
 }
 
 /**** content styles ****/
