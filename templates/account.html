@@ -21,13 +21,16 @@
 
 		{% include "fragments/menu.html" %}
 
-        {% include "fragments/contacts.html" %}
+        <div class="container">
+            {% include "fragments/contacts.html" %}
 
-        <div class="content">
-            <h1>Last checkin {{  account.lastNotificationDate|timesince }} ago.</h1>
+            <div class="content">
 
-            <a href="/notify">I'm Ok</a>
+                <h1><button>I'm OK!</button></h1>
 
+                <h2>Last checkin {{  account.lastNotificationDate|timesince }} ago.</h2>
+                
+            </div>
         </div>
 
         {% include "fragments/footer.html" %}
