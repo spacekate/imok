@@ -24,7 +24,7 @@ from main import *
 
 class WorkerHandler(ReqHandler):
     def get(self):
-        idleCustomers = Customer.gql("WHERE notificationTime <= :1 ",
+        idleCustomers = Customer.gql("WHERE notificationTime <= :1 AND alertSent = False ",
                                datetime.utcnow())
         for customer in idleCustomers:
             self.handleIdleCustomer(customer)
@@ -39,7 +39,8 @@ class WorkerHandler(ReqHandler):
             message.body=self.getTemplate("email/alert_email.txt", {'customer': customer})
             message.send()
             self.response.out.write("worker sent email to %s for %s</br>" %(contact.email, customer.email))
-
+        customer.alertSent=True
+        customer.put()
         
 
 

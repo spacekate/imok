@@ -15,10 +15,13 @@ class Customer(db.Model):
     creationDate = db.DateTimeProperty(auto_now_add=True)
     lastNotificationDate = db.DateTimeProperty()
     notificationTime = db.DateTimeProperty()
+    alertSent = db.BooleanProperty()
 
     def notify(self):
         self.lastNotificationDate = datetime.utcnow()
-        self.notificationTime = self.lastNotificationDate + timedelta(hours=24) 
+        #self.notificationTime = self.lastNotificationDate + timedelta(hours=24)
+        self.notificationTime = self.lastNotificationDate + timedelta(minutes=1)
+        self.alertSent = False 
 
 class Contact(db.Model):
     customer=db.ReferenceProperty(Customer)
