@@ -19,8 +19,8 @@ class Customer(db.Model):
 
     def notify(self):
         self.lastNotificationDate = datetime.utcnow()
-        #self.notificationTime = self.lastNotificationDate + timedelta(hours=24)
-        self.notificationTime = self.lastNotificationDate + timedelta(minutes=1)
+        self.notificationTime = self.lastNotificationDate + timedelta(hours=24)
+        #self.notificationTime = self.lastNotificationDate + timedelta(minutes=1)
         self.alertSent = False 
 
 class Contact(db.Model):
