@@ -9,9 +9,8 @@ from datetime import datetime, timedelta
 class Customer(db.Model):
     account = db.UserProperty()
     name = db.StringProperty()
-#    firstName = db.StringProperty()
-#    lastName = db.StringProperty()
     email = db.EmailProperty()
+    timeout = db.IntegerProperty()
     creationDate = db.DateTimeProperty(auto_now_add=True)
     lastNotificationDate = db.DateTimeProperty()
     notificationTime = db.DateTimeProperty()
@@ -19,7 +18,7 @@ class Customer(db.Model):
 
     def notify(self):
         self.lastNotificationDate = datetime.utcnow()
-        self.notificationTime = self.lastNotificationDate + timedelta(hours=24)
+        self.notificationTime = self.lastNotificationDate + timedelta(minutes=self.timeout)
         #self.notificationTime = self.lastNotificationDate + timedelta(minutes=1)
         self.alertSent = False 
 

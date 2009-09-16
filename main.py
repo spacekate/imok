@@ -34,6 +34,7 @@ class ReqHandler(webapp.RequestHandler):
             customer.account = users.get_current_user()
             customer.name = customer.account.nickname()
             customer.email = customer.account.email()
+            customer.timeout=24*60   #24 hours * 60 mins
             customer.notify()
             customer.put()
             account=customer
@@ -52,7 +53,9 @@ class ReqHandler(webapp.RequestHandler):
 
     def getTemplate(self, templateName, values):
         if (users.get_current_user()):
-            values['logoutLink'] = users.create_logout_url("/")            
+            values['logoutLink'] = users.create_logout_url("/")
+        if (users.is_current_user_admin()):
+            values['isAdmin'] = True
         path = os.path.join(os.path.dirname(__file__),'templates', templateName)
         return (template.render(path, values))
 

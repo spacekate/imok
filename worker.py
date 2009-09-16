@@ -28,7 +28,7 @@ class WorkerHandler(ReqHandler):
                                datetime.utcnow())
         for customer in idleCustomers:
             self.handleIdleCustomer(customer)
-        self.response.out.write("worker finished")
+        self.response.out.write("worker finished<br /><a href='/'>Return to App</a>")
 
     def handleIdleCustomer(self, customer):
         for contact in customer.contact_set:
