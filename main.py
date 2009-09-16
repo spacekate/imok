@@ -57,17 +57,6 @@ class ReqHandler(webapp.RequestHandler):
         return (template.render(path, values))
 
 ### Save Handlers
-#class SignupHandler(webapp.RequestHandler):
-#    def post(self):
-#        customer = Customer()
-#        customer.account = users.get_current_user()
-#        customer.firstName = self.request.get('firstName')
-#        customer.lastName = self.request.get('lastName')
-#        customer.email = self.request.get('email')
-#        customer.notify()
-#        customer.put()
-#        self.redirect('/account.html')
-
 class NotificationHandler(ReqHandler):
     def get(self):
         customer = self.getAccount()
@@ -97,14 +86,14 @@ class NewContactHandler(ReqHandler):
         self.response.out.write(self.getJsonContacts(message))
         
     def verifyContact(self, contact):
-#        contactQuery = Contact.gql("WHERE customer = :1  AND email = :2LIMIT 1",
-#                               contact.customer, contact.email)
-#        
-#        storedContact = contactQuery.get()
-        storedContact = Contact(email='contact.email', customer=contact.customer)
+        contactQuery = Contact.gql("WHERE customer = :1  AND email = :2 LIMIT 1",
+                               contact.customer, contact.email)
+        
+        storedContact = contactQuery.get()
+        #storedContact = Contact(email='contact.email', customer=contact.customer)
         #pet = Pet(name="Fluffy", owner=owner)
 
-        if (storedContact.is_saved()):
+        if (storedContact):
             return "Contact already exists"
         else:
             return None
