@@ -30,7 +30,7 @@ dojo.addOnLoad(function () {
                 haltHighlighting = false;
                 toggleHighlight(this.parentNode.parentNode, false);
 
-                if (dojo.hasClass(this, "validate")) {
+                if (dojo.hasClass(this, "validate") && this.value != '') {
                     validate(this);
                 }
             });
@@ -40,7 +40,11 @@ dojo.addOnLoad(function () {
                     eventType = "onchange"
                 }
                 dojo.connect(fields[j], eventType, function () {
-                    validate(this);
+                    var row = this.parentNode.parentNode;
+
+                    if (dojo.hasClass(row, "problem")) {
+                        validate(this);
+                    }
                 });
             }
 

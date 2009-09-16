@@ -21,49 +21,15 @@
 
 		{% include "fragments/menu.html" %}
 
+        {% include "fragments/contacts.html" %}
+
         <div class="content">
             <h1>Last checkin {{  account.lastNotificationDate|timesince }} ago.</h1>
 
             <a href="/notify">I'm Ok</a>
-            <br />
-{% for contact in account.contact_set %}
-            {{ contact.email }} [<a href="/contact/delete/?contactId={{contact.key}}">X</a>]<br />
-{% endfor %}
-            <form action="/contact/add/" id="addForm">
-                <input name="newContact" type="text"/>
-                <input type="submit" value="add" />
-            </form>
-
-
-            <form onsubmit="return validateAll()" enctype="multipart/form-data" id="signupForm" name="new_product" action="/signup/save/" method="POST">
-                <input type="hidden" name="contactlist" />
-
-               <table cellpadding="0" cellspacing="0" border="0">
-
-                   <tr>
-                       <th colspan="2">People to contact:</th>
-                   </tr>
-                   <tr>
-                       <td colspan="2">
-                           <div id="contacts"><em>Your contact list is empty</em></div>
-                           <div class="error" id="contactErrorMsg"></div>
-                       </td>
-                   </tr>
-                   <tr>
-                       <td>Email:</td>
-                       <td>
-                           <input id="contactemail" name="contactemail" class="email" onkeypress="addContactOnReturn(event)" />
-                           <input type="button" name="addcontact" onclick="addContact()" value="add" />
-                       </td>
-                   </tr>
-               </table>
-
-                <p class="buttons"><button>Continue ></button></p>
-
-            </form>
 
         </div>
-        
+
         {% include "fragments/footer.html" %}
 
 	</body>
