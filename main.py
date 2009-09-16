@@ -38,12 +38,15 @@ class ReqHandler(webapp.RequestHandler):
             customer.put()
             account=customer
         return account
-    def getJsonContacts(self):
+    def getJsonContacts(self, message=None):
         account = self.getAccount()
         contacts = []
         for contact in account.contact_set:
             contacts.append( {'email': contact.email, 'key': str(contact.key())})
-        return(demjson.encode(contacts))
+        result = {'contacts': contacts}
+        if message:
+            result['message'] = message
+        return(demjson.encode(result))
         
     def template(self, templateName, values):
         self.response.out.write(self.getTemplate(templateName, values))
@@ -77,19 +80,37 @@ class DeleteContactHandler(ReqHandler):
     def get(self):
         contact_key = self.request.get('contactId')
         contact= db.get(db.Key(contact_key))
-        contact.delete()
-        #self.response.out.write(getJsonContacts())
-        self.redirect('/contact/list/')
+        message=None
+        if (contact):
+            contact.delete()
+        else:
+            message="No contact with that key"
+        self.response.out.write(self.getJsonContacts(message))
         
 class NewContactHandler(ReqHandler):
     def get(self):
         contact = Contact()
         contact.customer=self.getAccount()
         contact.email=self.request.get('newContact')
-        contact.put()
-        #self.response.out.write(getJsonContacts())
-        self.redirect('/contact/list/')
+        message=self.verifyContact(contact)
+        if (not message):
+            contact.put()
+        self.response.out.write(self.getJsonContacts(message))
+        
+    def verifyContact(self, contact):
+#        contactQuery = Contact.gql("WHERE customer = :1  AND email = :2LIMIT 1",
+#                               contact.customer, contact.email)
+#        
+#        storedContact = contactQuery.get()
+        storedContact = Contact(email='contact.email', customer=contact.customer)
+        #pet = Pet(name="Fluffy", owner=owner)
 
+        if (storedContact.is_saved()):
+            return "Contact already exists"
+        else:
+            return None
+        
+        
 ### Web Handlers
 class ListContactHandler(ReqHandler):
     def get(self):
