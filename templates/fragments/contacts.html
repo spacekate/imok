@@ -1,24 +1,26 @@
 <div class="contactlist">
+
+    <h2>People to contact:</h2>
+
+    <ul class="contacts" id="contacts"></ul>
+    <div class="error" id="contactsMsg"></div>
+
     <form name="addContactForm"
           id="addContactForm"
           onsubmit="return validateAll()"
           action="javascript:addContact(dojo.byId('addContactForm'))">
 
-        <h2>People to contact:</h2>
-
-        <ul class="contacts" id="contacts"></ul>
-        <div class="error" id="contactsMsg"></div>
-
         <table cellpadding="0" cellspacing="0" border="0">
            <tr class="highlightable">
-               <td>Email:</td>
                <td>
                    <input id="newContact" name="newContact" class="email validate" />
                    <input type="submit" value="add" />
                </td>
-               <td name="comment" class="placeholder">&nbsp;</td>
-               <td name="comment" class="hidden note">Enter an email address and click 'add'</td>
-               <td name="comment" class="hidden error">Please enter a valid email address</td>
+           </tr>
+            <tr>
+               <td name="newContactComment" class="placeholder">&nbsp;</td>
+               <td name="newContactComment" class="hidden note">Enter an email address and click 'add'</td>
+               <td name="newContactComment" class="hidden error">Please enter a valid email address</td>
            </tr>
        </table>
     </form>

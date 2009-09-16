@@ -63,25 +63,38 @@ dojo.addOnLoad(function () {
 function toggleHighlight(/*dom object*/row, /*boolean*/show) {
     if (haltHighlighting) return;
 
+    var field = dojo.query("input", row).concat(dojo.query("select", row))[0];
+
     if (show) {
         dojo.addClass(row, "highlight");
 
-        if (!dojo.hasClass(row, "problem")) {
-            showComment(row, "note");
+        if (field && !dojo.hasClass(row, "problem")) {
+            showComment(field, "note");
         }
     } else {
         dojo.removeClass(row, "highlight");
 
-        if (!dojo.hasClass(row, "problem")) {
-            showComment(row, "placeholder");
+        if (field && !dojo.hasClass(row, "problem")) {
+            showComment(field, "placeholder");
         }
     }
 
+    if (field) {
+        // toggle highlight for any comment rows
+        var comments = dojo.query("[name^=" + field.name + "Comment]");
+
+        for (var i = 0; i < comments.length; i++) {
+            var commentRow = comments[i].parentNode;
+            if (commentRow != row) {
+                toggleHighlight(commentRow, show);
+            }
+        }
+    }
 }
 
-function showComment(/*dom object*/row, /*string*/commentClass) {
+function showComment(/*dom object*/field, /*string*/commentClass) {
     if (!commentClass) commentClass = "placeholder";
-    var comments = dojo.query("[name^=comment]", row);
+    var comments = dojo.query("[name^=" + field.name + "Comment]");
 
     for (var i = 0; i < comments.length; i++) {
         if (dojo.hasClass(comments[i], commentClass)) {
@@ -111,6 +124,7 @@ function validateAll() {
 function validate(field) {
     var valid = true;
     var row = field.parentNode.parentNode;
+    var commentCell = dojo.query("[name^=" + field.name + "Comment]")[0];
 
     // validate field
     if (dojo.hasClass(field, "email")){
@@ -131,8 +145,12 @@ function validate(field) {
         if (!dojo.hasClass(row, "problem")) {
             numErrors++;
             dojo.addClass(row, "problem");
+            // highlight comment row
+            if (commentCell) {
+                dojo.addClass(commentCell.parentNode, "problem");
+            }
             // show error message
-            showComment(row, "error");
+            showComment(field, "error");
         }
 
         // give field focus unless it's a file upload field
@@ -142,8 +160,12 @@ function validate(field) {
     } else if (valid && dojo.hasClass(row, "problem")) {
         numErrors--;
         dojo.removeClass(row, "problem");
+        // highlight comment row
+        if (commentCell) {
+            dojo.removeClass(commentCell.parentNode, "problem");
+        }
         // hide error message
-        showComment(row, "note");
+        showComment(field, "note");
         toggleHighlight(row, false);
     }
 
