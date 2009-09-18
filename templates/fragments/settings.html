@@ -1,0 +1,53 @@
+<div class="settings">
+
+    <h2>My settings</h2>
+
+    <form name="settingsForm"
+          id="settingsForm"
+          onsubmit="return validateAll(this)"
+          action="">
+
+        <table cellpadding="0" cellspacing="0" border="0">
+            <tr>
+               <td name="nameComment" class="hidden error"><label for="name">Please enter your name</label></td>
+           </tr>
+            <tr class="highlightable">
+               <td><label for="name">Name:</label>
+                   <br /><input id="name" name="name" class="name validate" /></td>
+            </tr>
+
+            <tr>
+               <td name="emailComment" class="hidden error"><label for="email">Please enter a valid email address</label></td>
+           </tr>
+            <tr class="highlightable">
+               <td><label for="email">Email:</label>
+                   <br /><input id="email" name="email" class="email validate" /></td>
+            </tr>
+
+            <tr class="highlightable">
+               <td><label for="email">Time limit:</label>
+                   <br /><select id="timeout" name="timeout">
+                        <option value="720">12 hours</option>
+                        <option value="1440" selected="true">24 hours</option>
+                        <option value="2160">36 hours</option>
+                        <option value="2880">48 hours</option>
+                        <option value="-1">do not monitor me</option>
+                   </select></td>
+            </tr>
+            <tr>
+                <td><a href="">see sample alert email</a></td>
+            </tr>
+            <tr>
+                <td class="button"><button>save</button></td>
+            </tr>
+       </table>
+    </form>
+
+    <!-- detail notes for form fields -->
+    <div id="nameDetail" class="detail hidden">We will refer to you by this name in
+        any emails we send to your contacts</div>
+    <div id="emailDetail" class="detail hidden">We will send information and notification
+        emails to you at this address</div>
+    <div id="timeoutDetail" class="detail hidden">If you haven't clicked the "I'm OK!" button
+        within this time limit we will email everyone on your contact list</div>
+</div>

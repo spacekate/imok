@@ -10,7 +10,8 @@ body {
     overflow: hidden;
 }
 .container .content,
-    .container .contactlist {
+    .container .contactlist,
+    .container .settings {
     padding-bottom: 2010px;
     margin-bottom: -2000px;
 }
@@ -129,11 +130,55 @@ div.topbit ul.secondary li a {
     font-weight: normal;
 }
 
+/* detail notes */
+div.detail {
+    position: absolute;
+}
+div.settings div.detail {
+    width: 220px;
+    height: 48px;
+    padding: 0 4px;
+    font-size: 0.9em;
+    color: #8A5C2E;
+    background: #F8F2EC;
+    border: 1px solid #8A5C2E;
+}
+
+/**** settings styles ****/
+div.settings {
+    float: left;
+    width: 200px;
+    padding: 0;
+    background: #F8F2EC;
+}
+div.settings table tr td {
+    padding: 6px 4px;
+    line-height: 1.2em;
+    color: #8A5C2E;
+    background: transparent;
+    border-color: #F8F2EC;
+}
+div.settings table td span.note {
+    color: #8A5C2E;
+    font-style: italic;
+    font-size: 0.85em;
+}
+div.settings table tr.highlightable td {
+    height: 50px;
+}
+div.settings table tr.highlight td {
+    background: #E6CDB3;
+}
+div.settings table tr.problem td.error {
+    color: #fff;
+    background: #c33;
+}
+
 /**** contactlist styles ****/
 div.contactlist {
     float: right;
     width: 260px;
-    padding: 0 10px 10px 10px;
+    padding: 0;
     background: #ECF2F8;
 }
 div.contactlist th,
@@ -144,7 +189,7 @@ div.contactlist th,
 /**** content styles ****/
 div.content {
     padding: 10px;
-    margin: 0 260px 0 0;
+    margin: 0 260px 0 200px;
     background: #fff;
     text-align: center;
 }
@@ -190,6 +235,9 @@ table th, table td {
 	vertical-align: middle;
     background: #ECF2F8;
 	border-bottom: 3px solid #fff;
+}
+table td.button {
+    text-align: right;
 }
 table input, table select, table textarea {
 	font-size: 1em;
@@ -385,7 +433,7 @@ input.url { width: 120px; }
 input.title { width: 300px; }
 input.anyliticsid { width: 180px; }
 input.paypalid { width: 300px; }
-input.name { width: 200px; }
+input.name { width: 160px; }
 input.email { width: 160px; }
 input.price { width: 50px; }
 

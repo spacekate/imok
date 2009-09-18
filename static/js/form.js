@@ -13,22 +13,26 @@ dojo.addOnLoad(function () {
         // add onmouseover events
         dojo.connect(highlightRows[i], "onmouseover", function () {
             toggleHighlight(this, true);
+            toggleDetailNote(findFields(this)[0], true);
         });
         dojo.connect(highlightRows[i], "onmouseout", function () {
             toggleHighlight(this, false);
+            toggleDetailNote(findFields(this)[0], false);
         });
 
         // add field events
-        var fields = dojo.query("input", highlightRows[i]).concat(dojo.query("select", highlightRows[i]));
+        var fields = findFields(highlightRows[i]);
 
         for (var j = 0; j < fields.length; j++) {
             dojo.connect(fields[j], "onfocus", function () {
+                toggleDetailNote(this, true);
                 toggleHighlight(this.parentNode.parentNode, true);
                 haltHighlighting = true;
             });
             dojo.connect(fields[j], "onblur", function () {
                 haltHighlighting = false;
                 toggleHighlight(this.parentNode.parentNode, false);
+                toggleDetailNote(this, false);
 
                 if (dojo.hasClass(this, "validate") && this.value != '') {
                     validate(this);
@@ -56,14 +60,21 @@ dojo.addOnLoad(function () {
             }
         }
     }
-
 });
+
+function findFields(section) {
+    if (!section) {
+        return dojo.query("input").concat(dojo.query("select"));
+    }
+
+    return dojo.query("input", section).concat(dojo.query("select", section));
+}
 
 // highlight/unhighlight row and show/hide comments
 function toggleHighlight(/*dom object*/row, /*boolean*/show) {
     if (haltHighlighting) return;
 
-    var field = dojo.query("input", row).concat(dojo.query("select", row))[0];
+    var field = findFields(row)[0];
 
     if (show) {
         dojo.addClass(row, "highlight");
@@ -92,6 +103,28 @@ function toggleHighlight(/*dom object*/row, /*boolean*/show) {
     }
 }
 
+// shows/hides associated detail div
+function toggleDetailNote(field, show) {
+    var detailNote = dojo.byId(field.name + "Detail");
+
+    if (haltHighlighting || !detailNote) return;
+    
+    if (show) {
+        var coords = dojo.coords(field.parentNode);
+        var leftPadding = 200;
+        var heightPadding = -4;
+
+        dojo.style(detailNote, {
+            "top" : coords.y + "px",
+            "left" : (coords.x + leftPadding) + "px"
+        });
+
+        dojo.removeClass(detailNote, "hidden");
+    } else {
+        dojo.addClass(detailNote, "hidden");
+    }
+}
+
 function showComment(/*dom object*/field, /*string*/commentClass) {
     if (!commentClass) commentClass = "placeholder";
     var comments = dojo.query("[name^=" + field.name + "Comment]");
@@ -108,9 +141,9 @@ function showComment(/*dom object*/field, /*string*/commentClass) {
 
 
 // validation functions
-function validateAll() {
+function validateAll(form) {
     var valid = true;
-    var fields = dojo.query("input").concat(dojo.query("select"));
+    var fields = findFields(form);
 
     for (var i = fields.length-1; i >= 0; i--) { // iterate backwards so the topmost error gets focus
         if (dojo.hasClass(fields[i], "validate")) {
