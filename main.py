@@ -67,6 +67,17 @@ class NotificationHandler(ReqHandler):
         customer.put()
         self.redirect('/account.html')
 
+class SaveSettingsHandler(ReqHandler):
+    def get(self):
+        customer = self.getAccount()
+        
+        customer.name   = self.request.get('name', customer.name)
+        customer.email  = self.request.get('email', customer.email)
+        customer.timeout= int(self.request.get('timeout', customer.timeout))
+        
+        customer.put()
+        self.redirect('/account.html')
+
 class DeleteContactHandler(ReqHandler):
     def get(self):
         contact_key = self.request.get('contactId')
@@ -160,6 +171,7 @@ def main():
                    ('/contact/list/', ListContactHandler),
                    ('/contact/add/', NewContactHandler),
                    ('/contact/delete/', DeleteContactHandler),
+                   ('/settings/save/', SaveSettingsHandler),
                    ('.*', FallbackHandler),
                   ]
           )

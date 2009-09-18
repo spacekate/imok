@@ -5,7 +5,7 @@
     <form name="settingsForm"
           id="settingsForm"
           onsubmit="return validateAll(this)"
-          action="">
+          action="/settings/save/">
 
         <table cellpadding="0" cellspacing="0" border="0">
             <tr>
@@ -13,7 +13,7 @@
            </tr>
             <tr class="highlightable">
                <td><label for="name">Name:</label>
-                   <br /><input id="name" name="name" class="name validate" /></td>
+                   <br /><input id="name" name="name" class="name validate" value="{{ account.name }}" /></td>
             </tr>
 
             <tr>
@@ -21,22 +21,24 @@
            </tr>
             <tr class="highlightable">
                <td><label for="email">Email:</label>
-                   <br /><input id="email" name="email" class="email validate" /></td>
+                   <br /><input id="email" name="email" class="email validate"  value="{{ account.email }}" /></td>
             </tr>
 
             <tr class="highlightable">
                <td><label for="email">Time limit:</label>
                    <br /><select id="timeout" name="timeout">
-                        <option value="720">12 hours</option>
-                        <option value="1440" selected="true">24 hours</option>
-                        <option value="2160">36 hours</option>
-                        <option value="2880">48 hours</option>
-                        <option value="-1">do not monitor me</option>
+                        <option value="720"  {% ifequal account.name '720' %}selected="true"{% endifequal %} >12 hours</option>
+                        <option value="1440" {% ifequal account.name '1440' %}selected="true"{% endifequal %}>24 hours</option>
+                        <option value="2160" {% ifequal account.name '2160' %}selected="true"{% endifequal %}>36 hours</option>
+                        <option value="2880" {% ifequal account.name '2880' %}selected="true"{% endifequal %}>48 hours</option>
+                        <option value="-1" {% ifequal account.name '-1' %}selected="true"{% endifequal %}>do not monitor me</option>
                    </select></td>
             </tr>
+            <!--
             <tr>
                 <td><a href="">see sample alert email</a></td>
             </tr>
+            -->
             <tr>
                 <td class="button"><button>save</button></td>
             </tr>
