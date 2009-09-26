@@ -191,6 +191,8 @@ div.content {
     padding: 10px;
     margin: 0 260px 0 200px;
     background: #fff;
+}
+div.account {
     text-align: center;
 }
 
@@ -435,6 +437,7 @@ input.anyliticsid { width: 180px; }
 input.paypalid { width: 300px; }
 input.name { width: 160px; }
 input.email { width: 160px; }
+input.phone { width: 140px; }
 input.price { width: 50px; }
 
 input.instructions {

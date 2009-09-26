@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>I'm OK!</title>
+        {% include "fragments/head.html" %}
+
+        <script type="text/javascript" src="/static/js/form.js"></script>
+        <script type="text/javascript" src="/static/js/contactlist.js"></script>
+
+        <script type="text.javascript">
+            function validateForm(form) {
+                if (!validateText(this.firstName)) {
+
+                }
+                return true;
+            }
+        </script>
+
+	</head>
+	<body>
+
+		{% include "fragments/menu.html" %}
+
+        <div class="container">
+            <!-- {% include "fragments/sources.html" %} -->
+            {% include "fragments/contacts.html" %}
+
+            <div class="content settings">
+
+                <h2>My settings</h2>
+
+                <form name="settingsForm"
+                      id="settingsForm"
+                      onsubmit="return validateAll(this)"
+                      action="">
+
+                    <table cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                           <td name="nameComment" class="hidden error"><label for="name">Please enter your name</label></td>
+                       </tr>
+                        <tr class="highlightable">
+                           <td><label for="name">Name:</label>
+                               <br /><input id="name" name="name" class="name validate" /></td>
+                        </tr>
+
+                        <tr>
+                           <td name="emailComment" class="hidden error"><label for="email">Please enter a valid email address</label></td>
+                       </tr>
+                        <tr class="highlightable">
+                           <td><label for="email">Email:</label>
+                               <br /><input id="email" name="email" class="email validate" /></td>
+                        </tr>
+
+                        <tr class="highlightable">
+                           <td><label for="phone">Home phone:</label>
+                               <br /><input id="phone" name="phone" class="phone" /></td>
+                        </tr>
+
+                        <tr class="highlightable">
+                           <td><label for="mobile">Mobile:</label>
+                               <br /><input id="mobile" name="mobile" class="phone" /></td>
+                        </tr>
+
+                        <tr class="highlightable">
+                           <td><label for="email">Time limit:</label>
+                               <br /><select id="timeout" name="timeout">
+                                    <option value="720">12 hours</option>
+                                    <option value="1440" selected="true">24 hours</option>
+                                    <option value="2160">36 hours</option>
+                                    <option value="2880">48 hours</option>
+                                    <option value="-1">do not monitor me</option>
+                               </select></td>
+                        </tr>
+                        <tr>
+                            <td><a href="">see sample alert email</a></td>
+                        </tr>
+                        <tr>
+                            <td class="button"><button>save</button></td>
+                        </tr>
+                   </table>
+                </form>
+
+                <!-- detail notes for form fields -->
+                <div id="nameDetail" class="detail hidden">We will refer to you by this name in
+                    any emails we send to your contacts</div>
+                <div id="emailDetail" class="detail hidden">We will send information and notification
+                    emails to you at this address</div>
+                <div id="phoneDetail" class="detail hidden">If we need to send an alert to your contacts, we will
+                    include your phone number so they can make sure you're OK.</div>
+                <div id="mobileDetail" class="detail hidden">If we need to send an alert to your contacts, we will
+                    include your mobile number so they can make sure you're OK.</div>
+                <div id="timeoutDetail" class="detail hidden">If you haven't clicked the "I'm OK!" button
+                    within this time limit we will alert everyone on your contact list</div>
+            </div>
+        </div>
+
+        {% include "fragments/footer.html" %}
+
+	</body>
+</html>

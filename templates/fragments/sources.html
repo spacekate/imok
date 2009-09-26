@@ -1,0 +1,31 @@
+<div class="settings">
+
+    <h2>My sources</h2>
+
+    <form name="settingsForm"
+          id="settingsForm"
+          onsubmit="return validateAll(this)"
+          action="">
+
+        <table cellpadding="0" cellspacing="0" border="0">
+            <tr class="highlightable">
+               <td><input type="checkbox" checked="true" name="website" id="website" /></td>
+               <td><label for="website">website</label></td>
+            </tr>
+
+            <tr class="highlightable">
+               <td><input type="checkbox" name="website" id="facebook" /></td>
+               <td><label for="facebook">facebook</label></td>
+            </tr>
+
+            <tr class="highlightable">
+               <td><input type="checkbox" name="website" id="device" /></td>
+               <td><label for="device">physical device</label></td>
+            </tr>
+
+            <tr>
+                <td colspan="2" class="button"><button>save</button></td>
+            </tr>
+       </table>
+    </form>
+</div>
