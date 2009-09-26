@@ -77,6 +77,8 @@ class SaveSettingsHandler(ReqHandler):
         customer = self.getAccount()
         
         customer.name   = self.request.get('name', customer.name)
+        customer.phone  = self.request.get('phone', customer.phone)
+        customer.mobile  = self.request.get('mobile', customer.mobile)
         customer.email  = self.request.get('email', customer.email)
         customer.timeout= int(self.request.get('timeout', customer.timeout))
         
@@ -176,6 +178,12 @@ class FallbackHandler(ReqHandler):
         if name:
             template_name=name
             logging.debug ("template: %s" % template_name)
+    account = self.getAccount()
+    if (account):
+        values={
+        'account': account,
+        'timeSinceNotification': (datetime.utcnow() - self.getAccount().lastNotificationDate)
+        }            
     self.template(template_name, values)
 
 def main():

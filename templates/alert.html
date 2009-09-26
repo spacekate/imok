@@ -28,6 +28,7 @@
                 <h1>We are a little worried about {{ alert.customer.name }}<h1>
                 <h2>Last checkin {{  alert.customer.lastNotificationDate|timesince }} ago</h2>
 				This alert is {% if alert.closed %}closed{% else %}open{% endif %}.
+				
                 <p class="error">This is an alpha service - all of your records will be deleted at random.</p>                
                 
             </div>

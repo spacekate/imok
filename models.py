@@ -11,6 +11,8 @@ END_OF_TIME=datetime.max
 class Customer(db.Model):
     account = db.UserProperty()
     name = db.StringProperty()
+    phone = db.StringProperty()
+    mobile = db.StringProperty()
     email = db.EmailProperty()
     timeout = db.IntegerProperty()
     creationDate = db.DateTimeProperty(auto_now_add=True)
