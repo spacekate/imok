@@ -7,4 +7,4 @@ They have not checked in with us for {{ customer.lastNotificationDate|timesince 
 Do you mind checking that they are ok?
 
 thanks
-
+http://localhost:8080/alert?alertId={{ alert.key.id }}-{{alert.check}}

@@ -65,6 +65,11 @@ class NotificationHandler(ReqHandler):
         customer = self.getAccount()
         customer.notify()
         customer.put()
+        alertQuery = Alert.gql("WHERE customer =:1 and closed = :2 LIMIT 1", customer, False)
+        alert = alertQuery.get()
+        if (alert):
+            alert.closed=True
+            alert.put()
         self.redirect('/account.html')
 
 class SaveSettingsHandler(ReqHandler):
@@ -118,6 +123,19 @@ class ListContactHandler(ReqHandler):
     def get(self):
         self.response.out.write(self.getJsonContacts(message=''))
         
+class AlertPageHandler(ReqHandler):
+    def get(self):
+        alertId = self.request.get('alertId')
+        (alertKey, a, alertCheck) = alertId.partition('-')
+        key = db.Key.from_path('Alert', int(alertKey))
+        alert= db.get(key)
+        
+        if (alertCheck == alert.check):
+            values={'alert': alert}
+            self.template('alert.html', values)
+        else:
+            self.error(404)
+            self.template('alert_not_found.html', {})
 class AccountHandler(ReqHandler):
     def get(self):
         account = self.getAccount()
@@ -172,6 +190,7 @@ def main():
                    ('/contact/add/', NewContactHandler),
                    ('/contact/delete/', DeleteContactHandler),
                    ('/settings/save/', SaveSettingsHandler),
+                   ('/alert', AlertPageHandler),
                    ('.*', FallbackHandler),
                   ]
           )

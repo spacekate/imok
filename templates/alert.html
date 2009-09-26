@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>I'm OK!</title>
+        {% include "fragments/head.html" %}
+        
+        <script type="text/javascript" src="/static/js/form.js"></script>
+        <script type="text/javascript" src="/static/js/contactlist.js"></script>
+
+        <script type="text.javascript">
+            function validateForm(form) {
+                if (!validateText(this.firstName)) {
+
+                }
+                return true;
+            }
+        </script>
+
+	</head>
+	<body>
+
+		{% include "fragments/menu.html" %}
+
+        <div class="container">
+
+            <div class="content">
+
+                <h1>We are a little worried about {{ alert.customer.name }}<h1>
+                <h2>Last checkin {{  alert.customer.lastNotificationDate|timesince }} ago</h2>
+				This alert is {% if alert.closed %}closed{% else %}open{% endif %}.
+                <p class="error">This is an alpha service - all of your records will be deleted at random.</p>                
+                
+            </div>
+        </div>
+
+        {% include "fragments/footer.html" %}
+
+	</body>

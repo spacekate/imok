@@ -9,6 +9,8 @@ import wsgiref.handlers
 import logging
 import mimetypes
 import urllib
+import random
+
 
 from datetime import datetime
 
@@ -26,19 +28,28 @@ class WorkerHandler(ReqHandler):
     def get(self):
         idleCustomers = Customer.gql("WHERE notificationTime <= :1 AND alertSent = False ",
                                datetime.utcnow())
+        
         for customer in idleCustomers:
-            self.handleIdleCustomer(customer)
+            self.handleIdleCustomer(customer, str(random.randint(1, 9999)))
         self.response.out.write("worker finished<br /><a href='/'>Return to App</a>")
 
-    def handleIdleCustomer(self, customer):
+    def handleIdleCustomer(self, customer, check):
+        # Create alert
+        alert=Alert()
+        alert.customer=customer
+        alert.check = check
+        alert.closed=False
+        alert.put()
+        # email alert
         for contact in customer.contact_set:
             message=mail.EmailMessage()
             message.sender='hcurrie@gmail.com'
             message.to=contact.email
             message.subject = "[imok] Have you spoken to %s recently?" %(customer.name)
-            message.body=self.getTemplate("email/alert_email.txt", {'customer': customer})
+            message.body=self.getTemplate("email/alert_email.txt", {'customer': customer, 'alert': alert})
             message.send()
             self.response.out.write("worker sent email to %s for %s</br>" %(contact.email, customer.email))
+            self.response.out.write("<hr><pre>%s</pre><hr></br>" %(message.body))
         customer.alertSent=True
         customer.put()
         
