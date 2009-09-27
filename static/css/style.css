@@ -242,6 +242,15 @@ div.sample .alert {
 div.sample p {
     margin: 0.5em;
 }
+div.sample ul {
+    margin: 0.5em;
+    padding-left: 0;
+    list-style-type: none;
+}
+div.sample ul li {
+    margin: 0;
+    padding: 0 1em;
+}
 
 /**** generic list styles ****/
 li {

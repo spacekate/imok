@@ -71,8 +71,10 @@ function findFields(section) {
 }
 
 function addInstructions(field, instructionText) {
-    dojo.addClass(field, 'instructions');
-    field.value = instructionText;
+    if (!field.value || field.value == '') {
+        dojo.addClass(field, 'instructions');
+        field.value = instructionText;
+    }
 
     dojo.connect(field, 'onfocus', function() {
         if (this.value == instructionText) {
