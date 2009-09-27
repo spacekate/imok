@@ -1,30 +1,8 @@
 /* on page load */
 dojo.addOnLoad(function() {
     getContactList();
-    addEmailInstructions();
+    addInstructions(dojo.byId('newContact'), "Enter email address");
 });
-
-function addEmailInstructions() {
-    var instructionText = 'Enter email address';
-    var newContact = dojo.byId('newContact');
-
-    dojo.addClass(newContact, 'instructions');
-    newContact.value = instructionText;
-
-    dojo.connect(newContact, 'onfocus', function() {
-        if (this.value == instructionText) {
-            dojo.removeClass(this, 'instructions');
-            this.value = '';
-        }
-    });
-
-    dojo.connect(newContact, 'onblur', function() {
-        if (this.value == '') {
-            dojo.addClass(this, 'instructions');
-            this.value = instructionText;
-        }
-    });
-}
 
 function getContactList() {
     dojo.xhrGet({

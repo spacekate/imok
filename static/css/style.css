@@ -11,7 +11,7 @@ body {
 }
 .container .content,
     .container .contactlist,
-    .container .settings {
+    .container .sources {
     padding-bottom: 2010px;
     margin-bottom: -2000px;
 }
@@ -135,8 +135,8 @@ div.detail {
     position: absolute;
 }
 div.settings div.detail {
-    width: 220px;
-    height: 48px;
+    width: 175px;
+    height: 5.5em;
     padding: 0 4px;
     font-size: 0.9em;
     color: #8A5C2E;
@@ -144,34 +144,11 @@ div.settings div.detail {
     border: 1px solid #8A5C2E;
 }
 
-/**** settings styles ****/
-div.settings {
+/**** sources styles ****/
+div.sources {
     float: left;
-    width: 200px;
-    padding: 0;
+    width: 180px;
     background: #F8F2EC;
-}
-div.settings table tr td {
-    padding: 6px 4px;
-    line-height: 1.2em;
-    color: #8A5C2E;
-    background: transparent;
-    border-color: #F8F2EC;
-}
-div.settings table td span.note {
-    color: #8A5C2E;
-    font-style: italic;
-    font-size: 0.85em;
-}
-div.settings table tr.highlightable td {
-    height: 50px;
-}
-div.settings table tr.highlight td {
-    background: #E6CDB3;
-}
-div.settings table tr.problem td.error {
-    color: #fff;
-    background: #c33;
 }
 
 /**** contactlist styles ****/
@@ -189,7 +166,7 @@ div.contactlist th,
 /**** content styles ****/
 div.content {
     padding: 10px;
-    margin: 0 260px 0 200px;
+    margin: 0 260px 0 180px;
     background: #fff;
 }
 div.account {
@@ -218,6 +195,52 @@ ul.error li {
 .note {
 	color: #666;
 	font-size: 0.9em;
+}
+
+.block {
+    clear: both;
+    float: none;
+}
+
+/**** settings styles ****/
+div.settings {
+    float: left;
+    width: 200px;
+    padding: 0;
+}
+div.settings h2 {
+    margin-top: 0;
+}
+div.settings table tr td {
+    padding: 6px 4px;
+    line-height: 1.2em;
+    color: #8A5C2E;
+    background: transparent;
+    border-color: #F8F2EC;
+}
+div.settings table td span.note {
+    color: #8A5C2E;
+    font-style: italic;
+    font-size: 0.85em;
+}
+div.settings table tr.highlight td {
+    background: #E6CDB3;
+}
+div.settings table tr.problem td.error {
+    color: #fff;
+    background: #c33;
+}
+
+/**** sample style ****/
+div.sample {
+    margin: 0 0 0 200px;
+    color: #2E5C8A;
+}
+div.sample .alert {
+    border: 1px solid #3D7AB8;
+}
+div.sample p {
+    margin: 0.5em;
 }
 
 /**** generic list styles ****/
@@ -439,11 +462,19 @@ input.name { width: 160px; }
 input.email { width: 160px; }
 input.phone { width: 140px; }
 input.price { width: 50px; }
+textarea.comment {
+    width: 100%;
+    font-size: 1em;
+    font-family: verdana, arial, helvetica, sans-serif;
+}
 
-input.instructions {
+.instructions {
     color: #999;
-    font-size: 0.9em;
     font-style: italic;
+}
+
+div.button {
+    text-align: center;
 }
 
 /**** list styles ****/

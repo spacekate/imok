@@ -64,10 +64,29 @@ dojo.addOnLoad(function () {
 
 function findFields(section) {
     if (!section) {
-        return dojo.query("input").concat(dojo.query("select"));
+        return dojo.query("input").concat(dojo.query("select")).concat(dojo.query("textarea"));
     }
 
-    return dojo.query("input", section).concat(dojo.query("select", section));
+    return dojo.query("input", section).concat(dojo.query("select", section)).concat(dojo.query("textarea", section));
+}
+
+function addInstructions(field, instructionText) {
+    dojo.addClass(field, 'instructions');
+    field.value = instructionText;
+
+    dojo.connect(field, 'onfocus', function() {
+        if (this.value == instructionText) {
+            dojo.removeClass(this, 'instructions');
+            field.value = '';
+        }
+    });
+
+    dojo.connect(field, 'onblur', function() {
+        if (this.value == '') {
+            dojo.addClass(this, 'instructions');
+            field.value = instructionText;
+        }
+    });
 }
 
 // highlight/unhighlight row and show/hide comments
@@ -111,7 +130,7 @@ function toggleDetailNote(field, show) {
     
     if (show) {
         var coords = dojo.coords(field.parentNode);
-        var leftPadding = 200;
+        var leftPadding = -185;
         var heightPadding = -4;
 
         dojo.style(detailNote, {
