@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>I'm OK! Button Sumulator</title>
+
+		{% include "fragments/head.html" %}
+
+	</head>
+	<body>
+
+		{% include "fragments/menu.html" %}
+
+		<div class="content">
+		<form action="/notification/">
+        
+		<select name="vendorId"> 
+            <option value="website" >website</option>
+            <option value="button" selected >button</option>
+        </select>
+
+		<select name="deviceId"> 
+            <option value="a" selected>a</option>
+            <option value="b" >b</option>
+            <option value="c" >c</option>
+            <option value="d" >d</option>
+        </select>
+        <input type="submit" />
+		
+		</form>
+
+		</div>
+
+		{% include "fragments/footer.html" %}
+	</body>
+</html>

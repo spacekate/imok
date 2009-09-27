@@ -14,6 +14,7 @@ class Customer(db.Model):
     phone = db.StringProperty()
     mobile = db.StringProperty()
     email = db.EmailProperty()
+    comment = db.StringProperty(multiline=True)
     timeout = db.IntegerProperty()
     creationDate = db.DateTimeProperty(auto_now_add=True)
     lastNotificationDate = db.DateTimeProperty()
@@ -27,7 +28,17 @@ class Customer(db.Model):
         else :
             self.notificationTime = self.lastNotificationDate + timedelta(minutes=self.timeout)
         self.alertSent = False 
-
+        
+class Notification(db.Model):
+    dateTime = db.DateTimeProperty()
+    sourceId = db.StringProperty()
+    deviceId = db.StringProperty()
+    
+class Source(db.Model):
+    customer=db.ReferenceProperty(Customer)
+    vendorId = db.StringProperty()
+    deviceId = db.StringProperty()
+        
 class Contact(db.Model):
     customer=db.ReferenceProperty(Customer)
     email = db.EmailProperty()

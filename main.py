@@ -35,6 +35,9 @@ class ReqHandler(webapp.RequestHandler):
             customer.name = customer.account.nickname()
             customer.email = customer.account.email()
             customer.timeout=24*60   #24 hours * 60 mins
+            customer.phone=''
+            customer.mobile=''
+            customer.comment=''
             customer.notify()
             customer.put()
             account=customer
@@ -71,7 +74,23 @@ class NotificationHandler(ReqHandler):
             alert.closed=True
             alert.put()
         self.redirect('/account.html')
-
+        
+class ExternalNotificationHandler(ReqHandler):
+    def get(self):
+        notification = Notification()
+        notification.vendorId = self.request.get('vendorId')
+        notification.deviceId = self.request.get('deviceId')
+        notification.dateTime=datetime.utcnow()
+        notification.put()
+        
+        # Find the customer(s) with the given source and notify them.
+        sourceQuery = Source.gql("WHERE vendorId =:1 and deviceId = :2 ", notification.vendorId, notification.deviceId)
+        sourceResults = sourceQuery.fetch(50)
+        for source in sourceResults:
+            source.customer.notify()
+            source.customer.put()
+        self.redirect('/account.html')
+        
 class SaveSettingsHandler(ReqHandler):
     def get(self):
         customer = self.getAccount()
@@ -81,9 +100,10 @@ class SaveSettingsHandler(ReqHandler):
         customer.mobile  = self.request.get('mobile', customer.mobile)
         customer.email  = self.request.get('email', customer.email)
         customer.timeout= int(self.request.get('timeout', customer.timeout))
-        
+        customer.comment = self.request.get('comment', customer.comment)
+
         customer.put()
-        self.redirect('/account.html')
+        self.redirect('/settings.html')
 
 class DeleteContactHandler(ReqHandler):
     def get(self):
@@ -199,6 +219,7 @@ def main():
                    ('/contact/delete/', DeleteContactHandler),
                    ('/settings/save/', SaveSettingsHandler),
                    ('/alert', AlertPageHandler),
+                   ('/notification/', ExternalNotificationHandler),
                    ('.*', FallbackHandler),
                   ]
           )
