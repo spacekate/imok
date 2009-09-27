@@ -133,15 +133,27 @@ div.topbit ul.secondary li a {
 /* detail notes */
 div.detail {
     position: absolute;
-}
-div.settings div.detail {
     width: 175px;
     height: 5.5em;
     padding: 0 4px;
     font-size: 0.9em;
+}
+div.settings div.detail {
     color: #8A5C2E;
     background: #F8F2EC;
     border: 1px solid #8A5C2E;
+}
+div.contactlist div.detail {
+    height: 4.4em;
+    color: #2E5C8A;
+    background: #ECF2F8;
+    border: 1px solid #2E5C8A;
+}
+div.contactlist div.delete {
+    height: 3em;
+    color: #933;
+    background: #F8ECEC;
+    border: 1px solid #933;
 }
 
 /**** sources styles ****/
@@ -215,7 +227,6 @@ div.settings table tr td {
     padding: 6px 4px;
     line-height: 1.2em;
     color: #8A5C2E;
-    background: transparent;
     border-color: #F8F2EC;
 }
 div.settings table td span.note {
@@ -227,6 +238,10 @@ div.settings table tr.highlight td {
     background: #E6CDB3;
 }
 div.settings table tr.problem td.error {
+    color: #fff;
+    background: #c33;
+}
+div.contactlist table tr.problem td.error {
     color: #fff;
     background: #c33;
 }
@@ -267,7 +282,6 @@ table.hasHTMLeditor {
 table th, table td {
 	padding: 1px 2px;
 	vertical-align: middle;
-    background: #ECF2F8;
 	border-bottom: 3px solid #fff;
 }
 table td.button {
@@ -372,7 +386,7 @@ div table tr td.note {
 /* problem */
 .problem th, .problem td {
 	color: #993333;
-	background: #F8ECEC;
+	background: #E6B3B3;
 }
 .problem td.action {
 	background: #ECC7C6;

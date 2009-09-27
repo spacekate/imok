@@ -17,17 +17,20 @@
                 </tr>
             </tbody>
             <tfoot>
+                <tr>
+                   <td colspan="2" name="newContactComment" class="hidden error"><label for="newContact">Please enter a valid email address</label></td>
+               </tr>
                <tr class="highlightable">
                    <td>&nbsp;</td>
                    <td><input id="newContact" name="newContact" class="email validate" />
                        <button>add</button></td>
                </tr>
-                <tr>
-                   <td colspan="2" name="newContactComment" class="placeholder">&nbsp;</td>
-                   <td colspan="2" name="newContactComment" class="hidden note">Enter an email address and click 'add'</td>
-                   <td colspan="2" name="newContactComment" class="hidden error">Please enter a valid email address</td>
-               </tr>
             </tfoot>
        </table>
+
+        <!-- detail notes for form fields -->
+        <div id="newContactDetail" class="detail hidden">Enter an email address and click the "add" button to
+            add it to your contact list.</div>
+        <div id="deleteDetail" class="detail delete hidden">Click here to delete this contact.</div>
     </form>
 </div>

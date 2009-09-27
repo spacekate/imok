@@ -34,7 +34,8 @@ dojo.addOnLoad(function () {
                 toggleHighlight(this.parentNode.parentNode, false);
                 toggleDetailNote(this, false);
 
-                if (dojo.hasClass(this, "validate") && this.value != '') {
+                if (dojo.hasClass(this, "aggressiveValidate") ||
+                    (dojo.hasClass(this, "validate") && this.value != '')) {
                     validate(this);
                 }
             });
@@ -46,7 +47,7 @@ dojo.addOnLoad(function () {
                 dojo.connect(fields[j], eventType, function () {
                     var row = this.parentNode.parentNode;
 
-                    if (dojo.hasClass(row, "problem")) {
+                    if (dojo.hasClass(row, "problem") || dojo.hasClass(this, "aggressiveValidate")) {
                         validate(this);
                     }
                 });
@@ -125,8 +126,10 @@ function toggleHighlight(/*dom object*/row, /*boolean*/show) {
 }
 
 // shows/hides associated detail div
-function toggleDetailNote(field, show) {
-    var detailNote = dojo.byId(field.name + "Detail");
+function toggleDetailNote(field, show, detailNote) {
+    if (!detailNote) {
+        detailNote = dojo.byId(field.name + "Detail");
+    }
 
     if (haltHighlighting || !detailNote) return;
     
