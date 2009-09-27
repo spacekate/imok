@@ -150,7 +150,8 @@ div.contactlist div.detail {
     border: 1px solid #2E5C8A;
 }
 div.contactlist div.delete {
-    height: 3em;
+    padding-top: 0.4em;
+    height: 2em;
     color: #933;
     background: #F8ECEC;
     border: 1px solid #933;
