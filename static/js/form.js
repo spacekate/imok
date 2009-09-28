@@ -72,7 +72,8 @@ function findFields(section) {
 }
 
 function addInstructions(field, instructionText) {
-    if (!field.value || field.value == '') {
+    field.value = "" + field.value;
+    if (!field.value || field.value == '' || field.value == instructionText) {
         dojo.addClass(field, 'instructions');
         field.value = instructionText;
     }
@@ -126,7 +127,10 @@ function toggleHighlight(/*dom object*/row, /*boolean*/show) {
 }
 
 // shows/hides associated detail div
-function toggleDetailNote(field, show, detailNote) {
+function toggleDetailNote(field, show, detailNote, parent) {
+    if (!parent) {
+        parent = field.parentNode.parentNode;
+    }
     if (!detailNote) {
         detailNote = dojo.byId(field.name + "Detail");
     }
@@ -134,7 +138,7 @@ function toggleDetailNote(field, show, detailNote) {
     if (haltHighlighting || !detailNote) return;
     
     if (show) {
-        var coords = dojo.coords(field.parentNode.parentNode);
+        var coords = dojo.coords(parent);
         var leftPadding = -180;
 
         dojo.style(detailNote, {

@@ -42,7 +42,7 @@ function setupAlert() {
 
         // add additional events for comment textbox
         if (fields[i].name == "comment") {
-            addInstructions(fields[i], commentInstructions, "textarea");
+            addInstructions(fields[i], commentInstructions);
             refreshComment(fields[i]);
 
             dojo.connect(fields[i], "onkeyup", function() {
