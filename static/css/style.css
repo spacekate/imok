@@ -133,7 +133,7 @@ div.topbit ul.secondary li a {
 /* detail notes */
 div.detail {
     position: absolute;
-    width: 165px;
+    width: 170px;
     height: 5.5em;
     padding: 0 4px;
     font-size: 0.9em;
@@ -144,6 +144,7 @@ div.contactlist {
     float: right;
     width: 240px;
     padding: 0 10px;
+    /* don't define margin-bottom here, it's up in the container section */
     color: #369;
     background: #ECF2F8;
 }
@@ -173,12 +174,21 @@ div.contactlist div.delete {
 div.sources {
     float: left;
     width: 150px;
+    margin-top: 8px;
+    /* don't define margin-bottom here, it's up in the container section */
     padding: 0 10px;
     color: #8A5C2E;
     background: #F8F2EC;
 }
 div.sources h2 {
     color: #B0753B;
+}
+div.sources p.splash {
+    margin: 5px;
+    font-size: 2.2em;
+    font-style: italic;
+    font-family: garamond, cursive;
+    color: #E6CDB3;
 }
 
 div.sources table tr.highlight td {
@@ -191,12 +201,11 @@ div.sources table tr.problem td.error {
 
 /**** settings styles ****/
 div.settings {
-    float: left;
-    width: 200px;
-    margin: 0 5px;
+    margin-top: 8px;
+    /* don't define margin-bottom here, it's up in the container section */
     padding: 0 5px;
     color: #59862D;
-    background: #B3D98C;
+    background: #E5F2D9;
 }
 div.settings h2 {
     margin-top: 0;
@@ -205,15 +214,9 @@ div.settings h2 {
 div.settings table tr td {
     padding: 6px 4px;
     line-height: 1.2em;
-    border-color: #F8F2EC;
-}
-div.settings table td span.note {
-    color: #8A5C2E;
-    font-style: italic;
-    font-size: 0.85em;
 }
 div.settings table tr.highlight td {
-    background: #BFDF9F;
+    background: #CBE6B3;
 }
 div.settings table tr.problem td.error {
     color: #fff;
@@ -227,7 +230,6 @@ div.settings div.detail {
 
 /**** sample style ****/
 div.sample {
-    margin: 0 0 0 380px;
     color: #2E5C8A;
 }
 div.sample .alert {
@@ -249,7 +251,7 @@ div.sample ul li {
 /**** content styles ****/
 div.content {
     padding: 0 10px;
-    margin: 0 260px 0 0;
+    margin: 0 260px 0 170px;
     background: #fff;
 }
 div.account {
@@ -496,11 +498,9 @@ table td.checkbox, table th.checkbox { text-align: center; }
 input, select { vertical-align: middle; }
 input.url { width: 120px; }
 input.title { width: 300px; }
-input.anyliticsid { width: 180px; }
-input.paypalid { width: 300px; }
-input.name { width: 160px; }
-input.email { width: 160px; }
-input.phone { width: 140px; }
+input.name { width: 170px; }
+input.email { width: 170px; }
+input.phone { width: 120px; }
 input.price { width: 50px; }
 textarea.comment {
     width: 100%;
