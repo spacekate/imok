@@ -38,6 +38,9 @@ function addContact(addContactForm) {
         }
 	});
 
+    // hide detailNote
+    dojo.addClass(dojo.byId('newContactDetail'), 'hidden');
+
     // clear contact field and set focus ready for next email
     email.value = '';
     email.focus();
@@ -57,6 +60,9 @@ function deleteContact(contactId) {
             //do nothing
         }
 	});
+
+    // hide detailNote
+    dojo.addClass(dojo.byId('deleteDetail'), 'hidden');
 
     // put focus in email input box
     dojo.byId('newContact').focus();
@@ -85,9 +91,11 @@ function updateContactList(contactJSON) {
         });
         dojo.connect(deleteCell, "onmouseover", function() {
             dojo.addClass(this.parentNode, "problem");
+            toggleDetailNote(this, true, "deleteDetail");
         });
         dojo.connect(deleteCell, "onmouseout", function() {
             dojo.removeClass(this.parentNode, "problem");
+            toggleDetailNote(this, false, "deleteDetail");
         });
 
         dojo.place(newRow, contactlist, 'last');

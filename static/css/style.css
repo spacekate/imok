@@ -133,40 +133,123 @@ div.topbit ul.secondary li a {
 /* detail notes */
 div.detail {
     position: absolute;
-}
-div.settings div.detail {
-    width: 175px;
+    width: 165px;
     height: 5.5em;
     padding: 0 4px;
     font-size: 0.9em;
-    color: #8A5C2E;
-    background: #F8F2EC;
-    border: 1px solid #8A5C2E;
-}
-
-/**** sources styles ****/
-div.sources {
-    float: left;
-    width: 180px;
-    background: #F8F2EC;
 }
 
 /**** contactlist styles ****/
 div.contactlist {
     float: right;
-    width: 260px;
-    padding: 0;
+    width: 240px;
+    padding: 0 10px;
+    color: #369;
     background: #ECF2F8;
 }
 div.contactlist th,
     div.contactlist td {
     border: none;
 }
+div.contactlist table tr.problem td.error {
+    color: #fff;
+    background: #c33;
+}
+div.contactlist div.detail {
+    height: 4.4em;
+    color: #2E5C8A;
+    background: #ECF2F8;
+    border: 1px solid #2E5C8A;
+}
+div.contactlist div.delete {
+    padding-top: 0.4em;
+    height: 2em;
+    color: #933;
+    background: #F8ECEC;
+    border: 1px solid #933;
+}
+
+/**** sources styles ****/
+div.sources {
+    float: left;
+    width: 150px;
+    padding: 0 10px;
+    color: #8A5C2E;
+    background: #F8F2EC;
+}
+div.sources h2 {
+    color: #B0753B;
+}
+
+div.sources table tr.highlight td {
+    background: #E6CDB3;
+}
+div.sources table tr.problem td.error {
+    color: #fff;
+    background: #c33;
+}
+
+/**** settings styles ****/
+div.settings {
+    float: left;
+    width: 200px;
+    margin: 0 5px;
+    padding: 0 5px;
+    color: #59862D;
+    background: #B3D98C;
+}
+div.settings h2 {
+    margin-top: 0;
+    color: #693;
+}
+div.settings table tr td {
+    padding: 6px 4px;
+    line-height: 1.2em;
+    border-color: #F8F2EC;
+}
+div.settings table td span.note {
+    color: #8A5C2E;
+    font-style: italic;
+    font-size: 0.85em;
+}
+div.settings table tr.highlight td {
+    background: #BFDF9F;
+}
+div.settings table tr.problem td.error {
+    color: #fff;
+    background: #c33;
+}
+div.settings div.detail {
+    color: #59862D;
+    background: #F2F8EC;
+    border: 1px solid #59862D;
+}
+
+/**** sample style ****/
+div.sample {
+    margin: 0 0 0 380px;
+    color: #2E5C8A;
+}
+div.sample .alert {
+    border: 1px solid #3D7AB8;
+}
+div.sample p {
+    margin: 0.5em;
+}
+div.sample ul {
+    margin: 0.5em;
+    padding-left: 0;
+    list-style-type: none;
+}
+div.sample ul li {
+    margin: 0;
+    padding: 0 1em;
+}
 
 /**** content styles ****/
 div.content {
-    padding: 10px;
-    margin: 0 260px 0 180px;
+    padding: 0 10px;
+    margin: 0 260px 0 0;
     background: #fff;
 }
 div.account {
@@ -202,56 +285,6 @@ ul.error li {
     float: none;
 }
 
-/**** settings styles ****/
-div.settings {
-    float: left;
-    width: 200px;
-    padding: 0;
-}
-div.settings h2 {
-    margin-top: 0;
-}
-div.settings table tr td {
-    padding: 6px 4px;
-    line-height: 1.2em;
-    color: #8A5C2E;
-    background: transparent;
-    border-color: #F8F2EC;
-}
-div.settings table td span.note {
-    color: #8A5C2E;
-    font-style: italic;
-    font-size: 0.85em;
-}
-div.settings table tr.highlight td {
-    background: #E6CDB3;
-}
-div.settings table tr.problem td.error {
-    color: #fff;
-    background: #c33;
-}
-
-/**** sample style ****/
-div.sample {
-    margin: 0 0 0 200px;
-    color: #2E5C8A;
-}
-div.sample .alert {
-    border: 1px solid #3D7AB8;
-}
-div.sample p {
-    margin: 0.5em;
-}
-div.sample ul {
-    margin: 0.5em;
-    padding-left: 0;
-    list-style-type: none;
-}
-div.sample ul li {
-    margin: 0;
-    padding: 0 1em;
-}
-
 /**** generic list styles ****/
 li {
     padding-bottom: 0.5em;
@@ -267,8 +300,6 @@ table.hasHTMLeditor {
 table th, table td {
 	padding: 1px 2px;
 	vertical-align: middle;
-    background: #ECF2F8;
-	border-bottom: 3px solid #fff;
 }
 table td.button {
     text-align: right;
@@ -372,7 +403,7 @@ div table tr td.note {
 /* problem */
 .problem th, .problem td {
 	color: #993333;
-	background: #F8ECEC;
+	background: #E6B3B3;
 }
 .problem td.action {
 	background: #ECC7C6;
@@ -483,6 +514,7 @@ textarea.comment {
 }
 
 div.button {
+    margin-top: 1em;
     text-align: center;
 }
 
