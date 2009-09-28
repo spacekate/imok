@@ -177,16 +177,6 @@ class FrontPageHandler(ReqHandler):
         else:
             self.template('index.html', {})
 
-#class SignupPageHandler(ReqHandler):
-#    def get(self):
-#        if (users.get_current_user()):
-#            if (self.getAccount()):
-#                self.redirect('/account.html')
-#            else:
-#                self.template('signup.html',{})
-#        else:
-#            self.template('index.html', {})
-
 class FallbackHandler(ReqHandler):
   def get(self):
     template_name = 'index.html'
@@ -199,9 +189,16 @@ class FallbackHandler(ReqHandler):
             template_name=name
             logging.debug ("template: %s" % template_name)
     account = self.getAccount()
+    customer = {'name': '<span name="nameSample"></span>',
+                'timeSinceNotification': '<span name="timeoutSample"></span>',
+                'phone': '<span name="phoneSample"></span>',
+                'mobile': '<span name="mobileSample"></span>',
+                'comment': '<textarea id="comment" name="comment" class="comment" rows="10" cols="10"></textarea>', 
+                }
     if (account):
         values={
         'account': account,
+        'customer': customer,
         'timeSinceNotification': (datetime.utcnow() - self.getAccount().lastNotificationDate)
         }            
     self.template(template_name, values)

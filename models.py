@@ -4,7 +4,7 @@
 
 from google.appengine.ext import db
 from datetime import datetime, timedelta
-
+from util import *
 ### Constants
 END_OF_TIME=datetime.max
 ### Models
@@ -20,7 +20,10 @@ class Customer(db.Model):
     lastNotificationDate = db.DateTimeProperty()
     notificationTime = db.DateTimeProperty()
     alertSent = db.BooleanProperty()
-
+    
+    def timeSinceNotification(self):
+        return formatTimeDelta(datetime.utcnow() - self.lastNotificationDate)
+   
     def notify(self):
         self.lastNotificationDate = datetime.utcnow()
         if (self.timeout == -1):

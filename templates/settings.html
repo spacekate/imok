@@ -21,7 +21,7 @@
 	<body>
 
 		{% include "fragments/menu.html" %}
-
+<!-- {{account.comment}} --> 
         <div class="container">
             <!-- {% include "fragments/sources.html" %} -->
             {% include "fragments/contacts.html" %}
@@ -97,26 +97,8 @@
                        we will alert everyone on your contact list with the following email:</p>
                     <div id="alertText" class="alert">
                         <p><strong>Subject: Is <span name="nameSample"></span> OK?</strong></p>
-                        <p>We haven't heard from
-                            <span name="nameSample"></span> for
-                            <span name="timeoutSample"></span>. If you haven't heard from them
-                           either, please give them a call or drop in for a quick visit to make sure
-                           they're OK.</p>
-
-                        <div id="phoneNumbers">
-                            <p>You can call <span name="nameSample"></span> on:</p>
-                            <ul>
-                               <li id="phoneSample"> home phone - <span name="phoneSample"></span></li>
-                               <li id="mobileSample"> mobile - <span name="mobileSample"></span></li>
-                            </ul>
-                        </div>
-
-                        <p>If you have news about <span name="nameSample"></span>,
-                           <a name="linkSample" href="">click here to let us know</a>.</p>
-
-                        <p id="commentIntro" class="hidden"><span name="nameSample"></span>'s additional instructions:</p>
-
-                        <p><textarea id="comment" name="comment" class="comment" rows="10" cols="10">{{account.comment}}</textarea></p>
+                        {% include "email/alert_email.txt" %}
+                        
                     </div>
                 </div>
                 <div id="unmonitored" class="hidden"><strong>You have selected "do not monitor me", so

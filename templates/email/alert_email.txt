@@ -1,10 +1,26 @@
-Hi,
+   <p>We haven't heard from {{customer.name}} for 
+        {{ customer.timeSinceNotification }}. If you haven't heard from them
+       either, please give them a call or drop in for a quick visit to make sure
+       they're OK.</p>
 
-We are a little concerned about {{customer.name}}.
+{% if customer.phone or customer.mobile %}
+    <div id="phoneNumbers">
+        <p>You can call {{customer.name}} on:</p>
+        <ul>
+           {% if customer.phone  %}
+               <li id="phoneSample"> home phone - {{customer.phone}}</li>
+           {% endif %}
+           <li id="mobileSample"> mobile - {{customer.mobile}}</li>
+        </ul>
+    </div>
+{% endif %}
 
-They have not checked in with us for {{ customer.lastNotificationDate|timesince }}.
+    <p>If you have news about {{customer.name}},
+       <a name="linkSample" href="http://localhost:8080/alert?alertId={{ alert.key.id }}-{{alert.check}}">click here to let us know</a>.</p>
 
-Do you mind checking that they are ok?
+{% if customer.comment %}
+    <p id="commentIntro" class="hidden">{{customer.name}}'s additional instructions:</p>
 
-thanks
-http://localhost:8080/alert?alertId={{ alert.key.id }}-{{alert.check}}
+    <p>{{customer.comment}}</p>
+{% endif %}
+    
