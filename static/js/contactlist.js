@@ -38,6 +38,9 @@ function addContact(addContactForm) {
         }
 	});
 
+    // hide detailNote
+    dojo.addClass(dojo.byId('newContactDetail'), 'hidden');
+
     // clear contact field and set focus ready for next email
     email.value = '';
     email.focus();
@@ -57,6 +60,9 @@ function deleteContact(contactId) {
             //do nothing
         }
 	});
+
+    // hide detailNote
+    dojo.addClass(dojo.byId('deleteDetail'), 'hidden');
 
     // put focus in email input box
     dojo.byId('newContact').focus();

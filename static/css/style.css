@@ -133,7 +133,7 @@ div.topbit ul.secondary li a {
 /* detail notes */
 div.detail {
     position: absolute;
-    width: 175px;
+    width: 165px;
     height: 5.5em;
     padding: 0 4px;
     font-size: 0.9em;
@@ -160,15 +160,16 @@ div.contactlist div.delete {
 /**** sources styles ****/
 div.sources {
     float: left;
-    width: 180px;
+    width: 150px;
+    padding: 0 10px;
     background: #F8F2EC;
 }
 
 /**** contactlist styles ****/
 div.contactlist {
     float: right;
-    width: 260px;
-    padding: 0;
+    width: 240px;
+    padding: 0 10px;
     background: #ECF2F8;
 }
 div.contactlist th,
@@ -179,7 +180,7 @@ div.contactlist th,
 /**** content styles ****/
 div.content {
     padding: 10px;
-    margin: 0 260px 0 180px;
+    margin: 0 260px 0 0;
     background: #fff;
 }
 div.account {
@@ -219,7 +220,7 @@ ul.error li {
 div.settings {
     float: left;
     width: 200px;
-    padding: 0;
+    padding: 0 10px;
 }
 div.settings h2 {
     margin-top: 0;
@@ -249,7 +250,7 @@ div.contactlist table tr.problem td.error {
 
 /**** sample style ****/
 div.sample {
-    margin: 0 0 0 200px;
+    margin: 0 0 0 380px;
     color: #2E5C8A;
 }
 div.sample .alert {

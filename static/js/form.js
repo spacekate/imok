@@ -134,9 +134,8 @@ function toggleDetailNote(field, show, detailNote) {
     if (haltHighlighting || !detailNote) return;
     
     if (show) {
-        var coords = dojo.coords(field.parentNode);
-        var leftPadding = -185;
-        var heightPadding = -4;
+        var coords = dojo.coords(field.parentNode.parentNode);
+        var leftPadding = -175;
 
         dojo.style(detailNote, {
             "top" : coords.y + "px",
