@@ -184,13 +184,10 @@ div.sources h2 {
     color: #B0753B;
 }
 div.sources p.splash {
-    margin: 5px;
-    font-size: 2.2em;
-    font-style: italic;
-    font-family: garamond, cursive;
-    color: #E6CDB3;
+    margin: 0.5em 0;
 }
 
+div.sources .highlight,
 div.sources table tr.highlight td {
     background: #E6CDB3;
 }
@@ -214,10 +211,13 @@ div.settings h2 {
 div.settings table tr td {
     padding: 6px 4px;
     line-height: 1.2em;
+    border-right: 20px solid #E5F2D9;
 }
+div.settings .highlight,
 div.settings table tr.highlight td {
     background: #CBE6B3;
 }
+div.settings .problem .error,
 div.settings table tr.problem td.error {
     color: #fff;
     background: #c33;
@@ -371,8 +371,9 @@ table tr.new td.active {
 table tr.new a, table tr.new button {
 	color: #206020;
 }
+.highlight,
 table tr.highlight th,
-    table tr.highlight td,
+table tr.highlight td,
 table th.highlight {
     background: #C0D4E8;
 }
@@ -403,6 +404,7 @@ div table tr td.note {
 }
 
 /* problem */
+td.problem,
 .problem th, .problem td {
 	color: #993333;
 	background: #E6B3B3;
@@ -418,8 +420,9 @@ table td.activecancel {
 table td.cancel a {
 	color: #993333;
 }
+table td.problem.highlight,
 table tr.problem.highlight th,
-    table tr.problem.highlight td {
+table tr.problem.highlight td {
 	background: #ECC7C6;
 }
 table tr.problem.highlight td.error {
@@ -481,7 +484,7 @@ table tr.advanced td.active {
 	background: #C7C6EC;
 }
 table tr.advanced.highlight th,
-    table tr.advanced.highlight td {
+table tr.advanced.highlight td {
 	background: #C7C6EC;
 }
 table tr.advanced.highlight td.note {

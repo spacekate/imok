@@ -18,7 +18,8 @@
         </script>
 
 	</head>
-	<body onload='dojo.byId("comment").value = "{{account.comment}}"'>
+
+<!--    <body onload='dojo.byId("comment").value = "{{account.comment|escape}}"'> -->
 
 		{% include "fragments/menu.html" %}
         <div class="container">
@@ -33,11 +34,11 @@
                   action="/settings/save/">
 
                 <div class="settings">
-                <h2>My settings</h2>
+                    <h2>My settings</h2>
 
                     <table cellpadding="0" cellspacing="0" border="0">
-                        <tr class="highlightable">
-                           <td><label for="timeout">Time limit:</label>
+                        <tr>
+                           <td class="highlightable"><span><label for="timeout">Time limit:</label>
                                <br /><select id="timeout" name="timeout"><!-- {{account.timeout}} -->
                                {% if isAdmin %}<option value="1"  {% ifequal account.timeout 1 %}selected="true"{% endifequal %} >1 minute</option>{% endif %}
                                <option value="720"  {% ifequal account.timeout 720 %}selected="true"{% endifequal %} >12 hours</option>
@@ -45,33 +46,33 @@
 			                        <option value="2160" {% ifequal account.timeout 2160 %}selected="true"{% endifequal %}>36 hours</option>
 			                        <option value="2880" {% ifequal account.timeout 2880 %}selected="true"{% endifequal %}>48 hours</option>
 			                        <option value="-1" {% ifequal account.timeout -1 %}selected="true"{% endifequal %}>do not monitor me</option>
-                               </select></td>
+                               </select></span></td>
                         </tr>
 
                         <tr>
                            <td name="nameComment" class="hidden error"><label for="name">Please enter your name</label></td>
                        </tr>
-                        <tr class="highlightable">
-                           <td><label for="name">Name:</label>
-                               <br /><input id="name" name="name" class="name validate aggressiveValidate" value="{{ account.name }}" /></td>
+                        <tr>
+                           <td class="highlightable"><span><label for="name">Name:</label>
+                               <br /><input id="name" name="name" class="name validate aggressiveValidate" value="{{ account.name }}" /></span></td>
                         </tr>
 
                         <tr>
                            <td name="emailComment" class="hidden error"><label for="email">Please enter a valid email address</label></td>
                        </tr>
-                        <tr class="highlightable">
-                           <td><label for="email">Email:</label>
-                               <br /><input id="email" name="email" class="email validate aggressiveValidate" value="{{ account.email }}" /></td>
+                        <tr>
+                           <td class="highlightable"><span><label for="email">Email:</label>
+                               <br /><input id="email" name="email" class="email validate aggressiveValidate" value="{{ account.email }}" /></span></td>
                         </tr>
 
-                        <tr class="highlightable">
-                           <td><label for="phone">Home phone:</label>
-                               <br /><input id="phone" name="phone" class="phone" value="{{ account.phone }}" /></td>
+                        <tr>
+                           <td class="highlightable"><span><label for="phone">Home phone:</label>
+                               <br /><input id="phone" name="phone" class="phone" value="{{ account.phone }}" /></span></td>
                         </tr>
 
-                        <tr class="highlightable">
-                           <td><label for="mobile">Mobile:</label>
-                               <br /><input id="mobile" name="mobile" class="phone" value="{{ account.mobile }}" /></td>
+                        <tr>
+                           <td class="highlightable"><span><label for="mobile">Mobile:</label>
+                               <br /><input id="mobile" name="mobile" class="phone" value="{{ account.mobile }}" /></span></td>
                         </tr>
                    </table>
 

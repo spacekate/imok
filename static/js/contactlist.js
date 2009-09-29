@@ -91,7 +91,7 @@ function updateContactList(contactJSON) {
         });
         dojo.connect(deleteCell, "onmouseover", function() {
             dojo.addClass(this.parentNode, "problem");
-            toggleDetailNote(this, true, "deleteDetail", this.parentNode);
+            toggleDetailNote(this, true, "deleteDetail");
         });
         dojo.connect(deleteCell, "onmouseout", function() {
             dojo.removeClass(this.parentNode, "problem");

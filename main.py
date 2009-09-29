@@ -189,16 +189,17 @@ class FallbackHandler(ReqHandler):
             template_name=name
             logging.debug ("template: %s" % template_name)
     account = self.getAccount()
-    customer = {'name': '<span name="nameSample"></span>',
+    if (account):
+        # create fake customer to be used on the settings page
+        fakeCustomer = {'name': '<span name="nameSample"></span>',
                 'timeSinceNotification': '<span name="timeoutSample"></span>',
                 'phone': '<span name="phoneSample"></span>',
                 'mobile': '<span name="mobileSample"></span>',
-                'comment': '<textarea id="comment" name="comment" class="comment" rows="10" cols="10"></textarea>', 
+                'comment': '<textarea id="comment" name="comment" class="comment" rows="10" cols="10">%s</textarea>' % account.comment,
                 }
-    if (account):
         values={
         'account': account,
-        'customer': customer,
+        'customer': fakeCustomer,
         'timeSinceNotification': (datetime.utcnow() - self.getAccount().lastNotificationDate)
         }            
     self.template(template_name, values)
