@@ -127,10 +127,7 @@ function toggleHighlight(/*dom object*/row, /*boolean*/show) {
 }
 
 // shows/hides associated detail div
-function toggleDetailNote(field, show, detailNote, parent) {
-    if (!parent) {
-        parent = field.parentNode.parentNode;
-    }
+function toggleDetailNote(field, show, detailNote) {
     if (!detailNote) {
         detailNote = dojo.byId(field.name + "Detail");
     }
@@ -138,8 +135,18 @@ function toggleDetailNote(field, show, detailNote, parent) {
     if (haltHighlighting || !detailNote) return;
     
     if (show) {
-        var coords = dojo.coords(parent);
         var leftPadding = -180;
+        var highlightableNode = field;
+
+        while (highlightableNode && !dojo.hasClass(highlightableNode, "highlightable")) {
+            highlightableNode = highlightableNode.parentNode;
+        }
+
+        if (!highlightableNode) {
+            return;
+        }
+
+        var coords = dojo.coords(highlightableNode);
 
         dojo.style(detailNote, {
             "top" : coords.y + "px",
@@ -183,8 +190,11 @@ function validateAll(form) {
 
 function validate(field) {
     var valid = true;
-    var row = field.parentNode.parentNode;
     var commentCell = dojo.query("[name^=" + field.name + "Comment]")[0];
+    var row = field;
+    while (row && !dojo.hasClass(row, "highlightable")) {
+        row = row.parentNode;
+    }
 
     // validate field
     if (dojo.hasClass(field, "email")){
@@ -199,7 +209,6 @@ function validate(field) {
     else {
         valid = validateNotEmpty(field);
     }
-
     // highlight invalid field
     if (!valid) {
         if (!dojo.hasClass(row, "problem")) {
@@ -225,8 +234,8 @@ function validate(field) {
             dojo.removeClass(commentCell.parentNode, "problem");
         }
         // hide error message
-        showComment(field, "note");
         toggleHighlight(row, false);
+        showComment(field, "note");
     }
 
     // show/hide submit button
