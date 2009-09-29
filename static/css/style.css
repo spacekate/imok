@@ -183,8 +183,14 @@ div.sources {
 div.sources h2 {
     color: #B0753B;
 }
-div.sources p.splash {
-    margin: 0.5em 0;
+div.sources ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+div.sources ul li {
+    margin: 0 0 0.5em 0;
+    padding: 0;
 }
 
 div.sources .highlight,
@@ -211,7 +217,6 @@ div.settings h2 {
 div.settings table tr td {
     padding: 6px 4px;
     line-height: 1.2em;
-    border-right: 20px solid #E5F2D9;
 }
 div.settings .highlight,
 div.settings table tr.highlight td {
