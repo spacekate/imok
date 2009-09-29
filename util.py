@@ -1,4 +1,9 @@
 def plural(num, word):
+    # Simplified code based upon:
+    # http://code.activestate.com/recipes/82102/
+    # In future a more complete implementation may be based upon 
+    # http://owl.english.purdue.edu/handouts/grammar/g_spelnoun.html
+    # http://grammar.ccc.commnet.edu/grammar/plurals.htm
     if num == 1:
         return '%s %s' %(num, word)
     else: 
