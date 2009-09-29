@@ -177,7 +177,7 @@ div.sources {
     margin-top: 8px;
     /* don't define margin-bottom here, it's up in the container section */
     padding: 0 10px;
-    color: #8A5C2E;
+    color: #9D6934;
     background: #F8F2EC;
 }
 div.sources h2 {
@@ -191,6 +191,7 @@ div.sources ul {
 div.sources ul li {
     margin: 0 0 0.5em 0;
     padding: 0;
+    border-bottom: 1px solid #D7B593;
 }
 
 div.sources .highlight,
