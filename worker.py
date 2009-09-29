@@ -21,6 +21,8 @@ from google.appengine.api import users
 from google.appengine.api import urlfetch
 from google.appengine.api import mail
 
+from html2text import html2text
+
 from models import *
 from main import *
 
@@ -46,7 +48,9 @@ class WorkerHandler(ReqHandler):
             message.sender='hcurrie@gmail.com'
             message.to=contact.email
             message.subject = "[imok] Have you spoken to %s recently?" %(customer.name)
-            message.body=self.getTemplate("email/alert_email.txt", {'customer': customer, 'alert': alert})
+            htmlBody = self.getTemplate("email/alert_email.txt", {'customer': customer, 'alert': alert})
+            message.html=htmlBody
+            message.body = html2text(htmlBody)
             message.send()
             self.response.out.write("worker sent email to %s for %s</br>" %(contact.email, customer.email))
             self.response.out.write("<hr><pre>%s</pre><hr></br>" %(message.body))

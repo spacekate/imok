@@ -25,6 +25,8 @@ from models import *
 ### Base Classes
 class ReqHandler(webapp.RequestHandler):
     def getAccount(self):
+        if (not users.get_current_user()):
+            return None
         accountQuery = Customer.gql("WHERE account = :1 LIMIT 1",
                                users.get_current_user())
         
