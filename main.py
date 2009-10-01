@@ -21,6 +21,7 @@ from google.appengine.api import urlfetch
 from google.appengine.api import mail
 
 from models import *
+from constants import *
 
 ### Base Classes
 class ReqHandler(webapp.RequestHandler):
@@ -61,6 +62,7 @@ class ReqHandler(webapp.RequestHandler):
             values['logoutLink'] = users.create_logout_url("/")
         if (users.is_current_user_admin()):
             values['isAdmin'] = True
+        values['domain'] = Constants.domain
         path = os.path.join(os.path.dirname(__file__),'templates', templateName)
         return (template.render(path, values))
 
@@ -199,9 +201,14 @@ class FallbackHandler(ReqHandler):
                 'mobile': '<span name="mobileSample"></span>',
                 'comment': '<textarea id="comment" name="comment" class="comment" rows="10" cols="10">%s</textarea>' % account.comment,
                 }
+        fakeAlert = {
+                     'key': {'id':'fake'}, 
+                     'check' : 'fake',
+                    }
         values={
         'account': account,
         'customer': fakeCustomer,
+        'alert': fakeAlert,
         'timeSinceNotification': (datetime.utcnow() - self.getAccount().lastNotificationDate)
         }            
     self.template(template_name, values)
