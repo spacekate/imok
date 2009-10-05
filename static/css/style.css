@@ -3,6 +3,7 @@ body {
 	padding: 0;
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-size: 76%;
+    color: #2E5C8A;
 	background: #fff;
 }
 
@@ -10,8 +11,10 @@ body {
     overflow: hidden;
 }
 .container .content,
-    .container .contactlist,
-    .container .sources {
+.container .contactlist,
+.container .sources,
+.container .settings, 
+.container .settings .fields {
     padding-bottom: 2010px;
     margin-bottom: -2000px;
 }
@@ -51,9 +54,14 @@ h1 button {
     cursor: pointer;
 }
 h2 {
-	color: #69c;
-    font-size: 1.5em;
+    margin-top: 0.75em;
+    font-size: 1.3em;
     font-weight: normal;
+    color: #69c;
+}
+.content h2 {
+    margin-top: 0.25em;
+    font-size: 1.8em;
 }
 h2 a {
     text-decoration: underline;
@@ -174,7 +182,6 @@ div.contactlist div.delete {
 div.sources {
     float: left;
     width: 150px;
-    margin-top: 8px;
     /* don't define margin-bottom here, it's up in the container section */
     padding: 0 10px;
     color: #9D6934;
@@ -204,42 +211,58 @@ div.sources table tr.problem td.error {
 }
 
 /**** settings styles ****/
-div.settings {
-    margin-top: 8px;
+form.settings {
     /* don't define margin-bottom here, it's up in the container section */
-    padding: 0 5px;
+    padding: 0 5px 5px 0;
     color: #59862D;
+    background: #F2F8EC;
+}
+/* fields styles */
+div.fields {
+    float: left;
+    width: 190px;
+    /* don't define margin-bottom here, it's up in the container section */
+    padding-left: 3px;
     background: #E5F2D9;
 }
-div.settings h2 {
-    margin-top: 0;
+div.fields h2 {
+    margin-bottom: 0.5em;
     color: #693;
 }
-div.settings table tr td {
+div.fields table {
+    width: 190px;
+}
+div.fields table tr td {
     padding: 6px 4px;
     line-height: 1.2em;
 }
-div.settings .highlight,
-div.settings table tr.highlight td {
+div.fields .highlight,
+div.fields table tr.highlight td {
     background: #CBE6B3;
 }
-div.settings .problem .error,
-div.settings table tr.problem td.error {
+div.fields .problem .error,
+div.fields table tr.problem td.error {
     color: #fff;
     background: #c33;
 }
-div.settings div.detail {
+div.fields div.detail {
     color: #59862D;
     background: #F2F8EC;
     border: 1px solid #59862D;
 }
-
-/**** sample style ****/
+/* settings sample styles */
 div.sample {
-    color: #2E5C8A;
+    margin-left: 200px;
+    padding-top: 0;
+}
+div.sample h3 {
+    margin-top: 0;
+    color: #693;
 }
 div.sample .alert {
-    border: 1px solid #3D7AB8;
+    color: #2E5C8A;
+    background: #fff;
+    border: 2px solid #E5F2D9;
 }
 div.sample p {
     margin: 0.5em;
@@ -253,11 +276,21 @@ div.sample ul li {
     margin: 0;
     padding: 0 1em;
 }
+div.sample p.button {
+    margin-top: 0;
+    margin-right: 0;
+    padding-top: 1.2em;
+    height: 2.5em;
+    text-align: right;
+}
+div.sample p.button input.submit {
+    margin-top: 5px;
+}
 
 /**** content styles ****/
 div.content {
-    padding: 0 10px;
-    margin: 0 260px 0 170px;
+    padding: 0 5px;
+    margin: 0 258px 0 168px;
     background: #fff;
 }
 div.account {
@@ -504,6 +537,9 @@ table tr.spacer th {
 table td.checkbox, table th.checkbox { text-align: center; }
 
 /**** form styles ****/
+form {
+    margin: 0;
+}
 input, select { vertical-align: middle; }
 input.url { width: 120px; }
 input.title { width: 300px; }
@@ -520,11 +556,6 @@ textarea.comment {
 .instructions {
     color: #999;
     font-style: italic;
-}
-
-div.button {
-    margin-top: 1em;
-    text-align: center;
 }
 
 /**** list styles ****/

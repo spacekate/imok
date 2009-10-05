@@ -19,7 +19,7 @@
 
 	</head>
 
-<!--    <body onload='dojo.byId("comment").value = "{{account.comment|escape}}"'> -->
+    <body>
 
 		{% include "fragments/menu.html" %}
         <div class="container">
@@ -30,10 +30,11 @@
 
             <form name="settingsForm"
                   id="settingsForm"
+                  class="settings"
                   onsubmit="return validateAll(this)"
                   action="/settings/save/">
 
-                <div class="settings">
+                <div class="fields">
                     <h2>My settings</h2>
 
                     <table cellpadding="0" cellspacing="0" border="0">
@@ -90,6 +91,8 @@
             </div>
 
             <div class="sample">
+                <p class="button"><input class="submit" type="submit" value="save settings" /></p>
+
                 <h3>Sample Alert Email</h3>
 
                 <div id="monitored">
@@ -104,9 +107,11 @@
                 </div>
                 <div id="unmonitored" class="hidden"><strong>You have selected "do not monitor me", so
                     you will not be monitored and no emails will be sent.</strong></div>
+
+                <p class="button"><input class="submit" type="submit" value="save settings" /></p>
             </div>
 
-            <div class="block button"><button>save settings</button></div>
+            <div class="block"></div>
         </form>
         </div>
     </div>
