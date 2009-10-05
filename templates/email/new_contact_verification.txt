@@ -1,0 +1,27 @@
+<p>Hi,</p>
+
+<p>{{contact.customer.name}} has nominated you as a 
+contact for the I'm Ok Service.</p>
+
+<p>This means that you would be able and willing to 
+check on them if they don't respond to our monotoring.</p>
+
+<p>If you are willing to be a contact for {{contact.customer.name}}
+please indicate that by clicking on the URL below:<br />
+
+http://{{domain}}/contact/accept?contactId={{contact.key}}
+</p>
+<p>If you do not wish to or unable to be a contact, please 
+indicate this by clicking this URL:<br />
+
+http://{{domain}}/contact/decline?contactId={{contact.key}}</p>
+
+<p>The I'm ok service recieves regular notifications from an 
+individual. If no notifiation is recieved in a reasonable time, 
+the contacts are notified.</p>
+ 
+<p>http://{{domain}}/</p>
+
+<p>thanks</p>
+
+<p>The I'm Ok service.</p> 

@@ -80,7 +80,7 @@ function updateContactList(contactJSON) {
 
         dojo.addClass(newRow, 'highlightable');
 
-        emailCell.innerHTML = contactJSON.contacts[i].email;
+        emailCell.innerHTML = contactJSON.contacts[i].email + " ["+ contactJSON.contacts[i].status+"]";
 
         deleteCell.innerHTML = 'x';
         dojo.addClass(deleteCell, 'delete');

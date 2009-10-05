@@ -12,6 +12,7 @@ import urllib
 import demjson
 
 from datetime import datetime
+from html2text import html2text
 
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
@@ -49,7 +50,7 @@ class ReqHandler(webapp.RequestHandler):
         account = self.getAccount()
         contacts = []
         for contact in account.contact_set:
-            contacts.append( {'email': contact.email, 'key': str(contact.key())})
+            contacts.append( {'email': contact.email, 'key': str(contact.key()), 'status': contact.status })
         result = {'contacts': contacts}
         result['message'] = message
         return(demjson.encode(result))
@@ -62,7 +63,7 @@ class ReqHandler(webapp.RequestHandler):
             values['logoutLink'] = users.create_logout_url("/")
         if (users.is_current_user_admin()):
             values['isAdmin'] = True
-        values['domain'] = Constants.domain
+        values['domain'] = Constants().domain()
         path = os.path.join(os.path.dirname(__file__),'templates', templateName)
         return (template.render(path, values))
 
@@ -109,6 +110,57 @@ class SaveSettingsHandler(ReqHandler):
         customer.put()
         self.redirect('/settings.html')
 
+        
+class NewContactHandler(ReqHandler):
+    def get(self):
+        contact = Contact()
+        contact.customer=self.getAccount()
+        contact.email=self.request.get('newContact')
+        contact.status='pending'
+        message=self.verifyContact(contact)
+        if (not message):
+            contact.put()
+            self.sendVerificationMessage(contact)
+        self.response.out.write(self.getJsonContacts(message))
+        
+    def verifyContact(self, contact):
+        contactQuery = Contact.gql("WHERE customer = :1  AND email = :2 LIMIT 1",
+                               contact.customer, contact.email)
+        
+        storedContact = contactQuery.get()
+
+        if (storedContact):
+            return "Contact already exists"
+        else:
+            return None
+    def sendVerificationMessage(self, contact):
+        message=mail.EmailMessage()
+        message.sender='hcurrie@gmail.com'
+        message.to=contact.email
+        message.subject = "[imok] Are you willing to help monitor %s " %(contact.customer.name)
+        htmlBody = self.getTemplate("email/new_contact_verification.txt", {'contact': contact})
+        message.html=htmlBody
+        message.body = html2text(htmlBody)
+        message.send()
+class UpdateContactHandler(ReqHandler):
+    def update(self, status):
+        contact_key = self.request.get('contactId')
+        contact= db.get(db.Key(contact_key))
+        if (contact):
+            contact.status=status
+            contact.put()
+        values={
+        'contact': contact,
+        }            
+        self.template("%s.html" % status, values)
+            
+class ContactDeclineHandler(UpdateContactHandler):
+    def get(self):
+        self.update('declined')
+class ContactAcceptHandler(UpdateContactHandler):
+    def get(self):
+        self.update('active')
+        
 class DeleteContactHandler(ReqHandler):
     def get(self):
         contact_key = self.request.get('contactId')
@@ -119,29 +171,6 @@ class DeleteContactHandler(ReqHandler):
         else:
             message="No contact with that key"
         self.response.out.write(self.getJsonContacts(message))
-        
-class NewContactHandler(ReqHandler):
-    def get(self):
-        contact = Contact()
-        contact.customer=self.getAccount()
-        contact.email=self.request.get('newContact')
-        message=self.verifyContact(contact)
-        if (not message):
-            contact.put()
-        self.response.out.write(self.getJsonContacts(message))
-        
-    def verifyContact(self, contact):
-        contactQuery = Contact.gql("WHERE customer = :1  AND email = :2 LIMIT 1",
-                               contact.customer, contact.email)
-        
-        storedContact = contactQuery.get()
-        #storedContact = Contact(email='contact.email', customer=contact.customer)
-        #pet = Pet(name="Fluffy", owner=owner)
-
-        if (storedContact):
-            return "Contact already exists"
-        else:
-            return None
         
         
 ### Web Handlers
@@ -224,6 +253,8 @@ def main():
                    ('/contact/list/', ListContactHandler),
                    ('/contact/add/', NewContactHandler),
                    ('/contact/delete/', DeleteContactHandler),
+                   ('/contact/decline', ContactDeclineHandler),
+                   ('/contact/accept', ContactAcceptHandler),
                    ('/settings/save/', SaveSettingsHandler),
                    ('/alert', AlertPageHandler),
                    ('/notification/', ExternalNotificationHandler),

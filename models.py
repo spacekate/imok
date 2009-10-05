@@ -45,6 +45,7 @@ class Source(db.Model):
 class Contact(db.Model):
     customer=db.ReferenceProperty(Customer)
     email = db.EmailProperty()
+    status = db.StringProperty(choices=set(["active", "pending", "declined"]))
 
 class Alert(db.Model):
     customer=db.ReferenceProperty(Customer)

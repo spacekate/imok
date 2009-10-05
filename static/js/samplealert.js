@@ -29,7 +29,9 @@ function setupAlert() {
             dojo.connect(fields[i], "onkeyup", function() {
                 refreshAlert(this);
             });
-        }
+            dojo.connect(fields[i], "onchange", function() {
+                refreshAlert(this);
+            });        }
 
         // set additional events for phone number fields
         if (fields[i].name == "phone" || fields[i].name == "mobile") {
