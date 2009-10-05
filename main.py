@@ -135,7 +135,7 @@ class NewContactHandler(ReqHandler):
             return None
     def sendVerificationMessage(self, contact):
         message=mail.EmailMessage()
-        message.sender='hcurrie@gmail.com'
+        message.sender=Constants().adminFrom()
         message.to=contact.email
         message.subject = "[imok] Are you willing to help monitor %s " %(contact.customer.name)
         htmlBody = self.getTemplate("email/new_contact_verification.txt", {'contact': contact})

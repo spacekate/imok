@@ -45,7 +45,7 @@ class WorkerHandler(ReqHandler):
         # email alert
         for contact in customer.contact_set:
             message=mail.EmailMessage()
-            message.sender='hcurrie@gmail.com'
+            message.sender=Constants().adminFrom()
             message.to=contact.email
             message.subject = "[imok] Have you spoken to %s recently?" %(customer.name)
             htmlBody = self.getTemplate("email/alert_email.txt", {'customer': customer, 'alert': alert})

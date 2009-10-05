@@ -6,3 +6,5 @@ class Constants():
         if (not domain):
             domain = "i-am-ok.appspot.com"
         return domain
+    def adminFrom(self):
+        return "imok@currie.com.au"
