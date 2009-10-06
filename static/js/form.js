@@ -127,15 +127,31 @@ function toggleHighlight(/*dom object*/row, /*boolean*/show) {
 }
 
 // shows/hides associated detail div
-function toggleDetailNote(field, show, detailNote) {
+function toggleDetailNote(field, show, detailNote, coords) {
     if (!detailNote) {
         detailNote = dojo.byId(field.name + "Detail");
     }
 
-    if (haltHighlighting || !detailNote) return;
-    
+    if (haltHighlighting || !detailNote) {
+        return;
+    }
+
     if (show) {
-        var leftPadding = -180;
+        setDetailNotePosition(field, detailNote, coords);
+        dojo.removeClass(detailNote, "hidden");
+    } else {
+        dojo.addClass(detailNote, "hidden");
+    }
+}
+
+function setDetailNotePosition(field, detailNote, coords) {
+    if (!detailNote) {
+        detailNote = dojo.byId(field.name + "Detail");
+    }
+    if (!detailNote) {
+        return;
+    }
+    if (!coords) {
         var highlightableNode = field;
 
         while (highlightableNode && !dojo.hasClass(highlightableNode, "highlightable")) {
@@ -146,17 +162,29 @@ function toggleDetailNote(field, show, detailNote) {
             return;
         }
 
-        var coords = dojo.coords(highlightableNode);
-
-        dojo.style(detailNote, {
-            "top" : coords.y + "px",
-            "left" : (coords.x + leftPadding) + "px"
-        });
-
-        dojo.removeClass(detailNote, "hidden");
-    } else {
-        dojo.addClass(detailNote, "hidden");
+        coords = dojo.coords(highlightableNode);
     }
+
+    var leftPadding = -178;
+
+    dojo.style(detailNote, {
+        "top" : getScrollTop() + coords.y + "px",
+        "left" : (coords.x + leftPadding) + "px"
+    });
+}
+
+
+function getScrollTop() {
+    var scrollTop = document.body.scrollTop;
+
+    if (scrollTop == 0) {
+        if (window.pageYOffset)
+            scrollTop = window.pageYOffset;
+        else
+            scrollTop = (document.body.parentElement) ? document.body.parentElement.scrollTop : 0;
+    }
+
+    return scrollTop;
 }
 
 function showComment(/*dom object*/field, /*string*/commentClass) {

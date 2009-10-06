@@ -44,6 +44,7 @@ function addContact(addContactForm) {
     // clear contact field and set focus ready for next email
     email.value = '';
     email.focus();
+    setDetailNotePosition(email);
 }
 
 function deleteContact(contactId) {
@@ -63,9 +64,6 @@ function deleteContact(contactId) {
 
     // hide detailNote
     dojo.addClass(dojo.byId('deleteDetail'), 'hidden');
-
-    // put focus in email input box
-    dojo.byId('newContact').focus();
 }
 
 function updateContactList(contactJSON) {
@@ -74,34 +72,52 @@ function updateContactList(contactJSON) {
     contactlist.innerHTML = '';
 
     for (var i = 0; i < contactJSON.contacts.length; i++) {
-        var newRow = document.createElement('tr');
-        var emailCell = document.createElement('td');
-        var deleteCell = document.createElement('td');
-
-        dojo.addClass(newRow, 'highlightable');
-
-        emailCell.innerHTML = contactJSON.contacts[i].email + " ["+ contactJSON.contacts[i].status+"]";
-
-        deleteCell.innerHTML = 'x';
-        dojo.addClass(deleteCell, 'delete');
-        dojo.attr(deleteCell, 'title', 'click to delete this contact');
-        dojo.attr(deleteCell, 'id', contactJSON.contacts[i].key);
-        dojo.connect(deleteCell, "onclick", function() {
-            deleteContact(this.id);
-        });
-        dojo.connect(deleteCell, "onmouseover", function() {
-            dojo.addClass(this.parentNode, "problem");
-            toggleDetailNote(this, true, "deleteDetail");
-        });
-        dojo.connect(deleteCell, "onmouseout", function() {
-            dojo.removeClass(this.parentNode, "problem");
-            toggleDetailNote(this, false, "deleteDetail");
-        });
-
-        dojo.place(newRow, contactlist, 'last');
-        dojo.place(emailCell, newRow, 'last');
-        dojo.place(deleteCell, newRow, 'first');
+        var email = contactJSON.contacts[i].email;
+        var status = contactJSON.contacts[i].status;
+        var key = contactJSON.contacts[i].key;
+        displayContact(email, status, key);
     }
 
+    // test to show active and declined contacts
+    displayContact('diver.dan@surethingmate.to', 'active', '556677');
+    displayContact('bob.jelly@nogo.to', 'declined', '889900');
+
     dojo.byId('contactsMsg').innerHTML = contactJSON.message;
+}
+
+function displayContact(email, status, key) {
+    var contactlist = dojo.byId('contacts');
+    var newRow = document.createElement('tr');
+    var emailCell = document.createElement('td');
+    var deleteCell = document.createElement('td');
+    var statusSpan = document.createElement('span');
+
+    dojo.addClass(newRow, 'highlightable ' + status);
+
+    emailCell.name = key;
+    emailCell.innerHTML = email + "<br />";
+
+    deleteCell.innerHTML = 'x';
+    dojo.addClass(deleteCell, 'delete');
+    dojo.attr(deleteCell, 'id', key);
+    dojo.connect(deleteCell, "onclick", function() {
+        deleteContact(this.id);
+    });
+    dojo.connect(deleteCell, "onmouseover", function() {
+        dojo.addClass(this.parentNode, "problem");
+        toggleDetailNote(this, true, "deleteDetail");
+    });
+    dojo.connect(deleteCell, "onmouseout", function() {
+        dojo.removeClass(this.parentNode, "problem");
+        toggleDetailNote(this, false, "deleteDetail");
+    });
+
+    statusSpan.name = status;
+    dojo.addClass(statusSpan, 'status');
+    statusSpan.innerHTML = status;
+
+    dojo.place(newRow, contactlist, 'last');
+    dojo.place(emailCell, newRow, 'last');
+    dojo.place(deleteCell, newRow, 'first');
+    dojo.place(statusSpan, emailCell, 'last');
 }

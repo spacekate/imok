@@ -141,7 +141,7 @@ div.topbit ul.secondary li a {
 /* detail notes */
 div.detail {
     position: absolute;
-    width: 170px;
+    width: 168px;
     height: 5.5em;
     padding: 0 4px;
     font-size: 0.9em;
@@ -158,11 +158,34 @@ div.contactlist {
 }
 div.contactlist th,
     div.contactlist td {
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+    line-height: 1em;
     border: none;
+}
+div.contactlist tr.active td {
+    color: #36c;
+}
+div.contactlist tr.pending td {
+    color: #578DC7;
+}
+div.contactlist tr.declined td {
+    color: #933;
+}
+div.contactlist span.status {
+    color: #369;
+    font-size: 0.8em;
+    font-style: italic;
 }
 div.contactlist table tr.problem td.error {
     color: #fff;
     background: #c33;
+}
+div.contactlist table tr.problem td {
+    color: #933 !important;;
+}
+div.contactlist .delete {
+    color: #933 !important;
 }
 div.contactlist div.detail {
     height: 4.4em;
@@ -176,6 +199,19 @@ div.contactlist div.delete {
     color: #933;
     background: #F8ECEC;
     border: 1px solid #933;
+}
+div.contactlist dl {
+    margin-top: 2em;
+    font-size: 0.8em;
+    border-top: 1px solid #71A1D0;
+}
+div.contactlist dl dt {
+    margin-top: 0.5em;
+    font-style: italic;
+}
+div.contactlist dl dd {
+    margin-left: 0;
+    padding-left: 1em;
 }
 
 /**** sources styles ****/
@@ -220,9 +256,9 @@ form.settings {
 /* fields styles */
 div.fields {
     float: left;
-    width: 190px;
+    width: 185px;
     /* don't define margin-bottom here, it's up in the container section */
-    padding-left: 3px;
+    padding-left: 7px;
     background: #E5F2D9;
 }
 div.fields h2 {
@@ -230,10 +266,10 @@ div.fields h2 {
     color: #693;
 }
 div.fields table {
-    width: 190px;
+    width: 185px;
 }
 div.fields table tr td {
-    padding: 6px 4px;
+    padding: 6px 3px 6px 2px;
     line-height: 1.2em;
 }
 div.fields .highlight,
@@ -290,7 +326,7 @@ div.sample p.button input.submit {
 /**** content styles ****/
 div.content {
     padding: 0 5px;
-    margin: 0 258px 0 168px;
+    margin: 0 257px 0 167px;
     background: #fff;
 }
 div.account {
@@ -381,6 +417,7 @@ td.delete {
     color: #c66;
     cursor: pointer;
     text-align: center;
+    vertical-align: top;
 }
 div table td.active,
     div table td.active a,
