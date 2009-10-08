@@ -151,7 +151,7 @@ div.detail {
 div.contactlist {
     float: right;
     width: 240px;
-    padding: 0 10px;
+    padding: 0 4px;
     /* don't define margin-bottom here, it's up in the container section */
     color: #369;
     background: #ECF2F8;
@@ -332,6 +332,29 @@ div.content {
 div.account {
     text-align: center;
 }
+div.account.content {
+    padding-top: 8px;
+}
+
+div.nocontacts {
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    color: #633;
+    background: transparent url(/static/images/triangle.gif) right center no-repeat;
+}
+div.nocontacts div {
+    margin: 0 85px 8px 8px;
+    padding: 4px 8px;
+    background: #e6b3b3;
+}
+div.nocontacts h3 {
+    margin: 0;
+    color: #933;
+}
+div.nocontacts p {
+    margin: 0;
+}
 
 .steps p {
     margin: 0 0 0.5em 25px;
@@ -480,7 +503,7 @@ div table tr td.note {
 }
 
 /* problem */
-td.problem,
+div.problem, td.problem,
 .problem th, .problem td {
 	color: #993333;
 	background: #E6B3B3;
@@ -580,8 +603,8 @@ form {
 input, select { vertical-align: middle; }
 input.url { width: 120px; }
 input.title { width: 300px; }
-input.name { width: 170px; }
-input.email { width: 170px; }
+input.name { width: 165px; }
+input.email { width: 165px; }
 input.phone { width: 120px; }
 input.price { width: 50px; }
 textarea.comment {

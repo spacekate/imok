@@ -1,6 +1,7 @@
 /* on page load */
 dojo.addOnLoad(function() {
     getContactList();
+
     addInstructions(dojo.byId('newContact'), "Enter email address");
 });
 
@@ -78,11 +79,30 @@ function updateContactList(contactJSON) {
         displayContact(email, status, key);
     }
 
+/*
     // test to show active and declined contacts
     displayContact('diver.dan@surethingmate.to', 'active', '556677');
     displayContact('bob.jelly@nogo.to', 'declined', '889900');
+*/
 
     dojo.byId('contactsMsg').innerHTML = contactJSON.message;
+
+    // show/hide statusKey and addContactsReminder
+    if (contactJSON.contacts.length > 0) {
+        dojo.removeClass(dojo.byId('statusKey'), 'hidden');
+
+        var noContacts = dojo.byId('noContacts');
+        if (noContacts && !dojo.hasClass(noContacts, 'hidden')) {
+            dojo.addClass(noContacts, 'hidden');
+        }
+    } else {
+        dojo.addClass(dojo.byId('statusKey'), 'hidden');
+
+        var noContacts = dojo.byId('noContacts');
+        if (noContacts && dojo.hasClass(noContacts, 'hidden')) {
+            dojo.removeClass(noContacts, 'hidden');
+        }
+    }
 }
 
 function displayContact(email, status, key) {

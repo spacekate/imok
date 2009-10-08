@@ -15,8 +15,9 @@
     </div>
 {% endif %}
 
-    <p>If you have news about {{customer.name}}, please click on the URL below to let us know:<br />
-       <a name="linkSample" href="http://{{domain}}/alert?alertId={{ alert.key.id }}-{{alert.check}}">http://{{domain}}/alert?alertId={{ alert.key.id }}-{{alert.check}}</a></p>
+    <p>If you have news about {{customer.name}}, please go to
+       <a name="linkSample" href="http://{{domain}}/alert?alertId={{ alert.key.id }}-{{alert.check}}">http://{{domain}}/alert?alertId={{ alert.key.id }}-{{alert.check}}</a>
+       to let us know.</p>
 
 {% if customer.comment %}
     <p id="commentIntro" class="hidden">{{customer.name}}'s additional instructions:</p>

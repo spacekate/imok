@@ -34,6 +34,8 @@
                   onsubmit="return validateAll(this)"
                   action="/settings/save/">
 
+                {% include "fragments/no_contacts.html" %}
+
                 <div class="fields">
                     <h2>My settings</h2>
 
@@ -79,7 +81,7 @@
 
                 <!-- detail notes for form fields -->
                 <div id="timeoutDetail" class="detail hidden">If you haven't clicked the "I'm OK!" button
-                    within this time limit we will alert everyone on your contact list.</div>
+                    within this time limit we will alert all of your active contacts.</div>
                 <div id="nameDetail" class="detail hidden">We will refer to you by this name in
                     any emails we send to your contacts.</div>
                 <div id="emailDetail" class="detail hidden">We will send information and notification
@@ -88,6 +90,7 @@
                     include this phone number so they can make sure you're OK.</div>
                 <div id="mobileDetail" class="detail hidden">If we need to send an alert to your contacts, we will
                     include this mobile number so they can make sure you're OK.</div>
+                <div id="sendRmeinders" class="detail hidden">We can send you an email to remind you to check-in.</div>
             </div>
 
             <div class="sample">
@@ -98,7 +101,7 @@
                 <div id="monitored">
                     <p>If you don't click the "I'm OK!" button every
                        <span name="timeoutSample"></span> (or less)
-                       we will alert everyone on your contact list with the following email:</p>
+                       we will alert all of your active contacts with the following email:</p>
                     <div id="alertText" class="alert">
                         <p><strong>Subject: Is <span name="nameSample"></span> OK?</strong></p>
                         {% include "email/alert_email.txt" %}
