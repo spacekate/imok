@@ -37,8 +37,8 @@ class Notification(db.Model):
     vendorId = db.StringProperty()
     deviceId = db.StringProperty()
     customer=db.ReferenceProperty(Customer)
-    def timeSinceNotification(self):
-        return abbreviatedTimeDelta(datetime.utcnow() - self.dateTime)
+    def notificationTime(self):
+        return formatTimeWithReference(datetime.utcnow(), self.dateTime)
     
 class Source(db.Model):
     customer=db.ReferenceProperty(Customer)
