@@ -9,17 +9,20 @@ def plural(num, word):
     else: 
         return '%s %s%s' %(num, word, 's')
     
-def formatTimeDelta(delta):
+def formatTimeDelta(delta, weekLabel='week', dayLabel='day', hourLabel='hour', minLabel='minute', secLabel='second'):
     weeks, days = divmod(delta.days, 7)
     hours, remainder = divmod(delta.seconds, 3600)  
     minutes, seconds = divmod(remainder, 60)
     
     if weeks:
-        return plural(weeks,'week') + ' ' + plural(days, 'day')
+        return plural(weeks,weekLabel) + ' ' + plural(days, dayLabel)
     if days:
-        return plural(days,'day') + ' ' + plural(hours, 'hours')
+        return plural(days,dayLabel) + ' ' + plural(hours, hourLabel)
     if hours:
-        return plural(hours,'hour') + ' ' + plural(minutes, 'minute')
+        return plural(hours,hourLabel) + ' ' + plural(minutes, minLabel)
     if minutes:
-        return plural(minutes,'minute') + ' ' + plural(seconds, 'second')
-    return plural(seconds,'second')  
+        return plural(minutes,minLabel) + ' ' + plural(seconds, secLabel)
+    return plural(seconds,secLabel)
+
+def abbreviatedTimeDelta(delta):
+    return formatTimeDelta(delta, minLabel='min', secLabel='sec')
