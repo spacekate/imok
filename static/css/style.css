@@ -318,22 +318,33 @@ div.sample p.button {
     padding-top: 1.2em;
     height: 2.5em;
     text-align: right;
+    vertical-align: middle;
+}
+div.sample p.problem {
+    color: #633;
+    background: transparent;
+}
+div.sample p.problem input.submit {
+    background: #e6b3b3;
 }
 div.sample p.button input.submit {
     margin-top: 5px;
+    vertical-align: middle;
+}
+div.sample p.button span.instructions {
+    line-height: 1.6em;
+    color: #633;
+    vertical-align: bottom;
 }
 
 /**** content styles ****/
 div.content {
     padding: 0 5px;
-    margin: 0 257px 0 167px;
+    margin: 0 245px 0 167px;
     background: #fff;
 }
 div.account {
     text-align: center;
-}
-div.account.content {
-    padding-top: 8px;
 }
 
 div.nocontacts {
@@ -344,9 +355,12 @@ div.nocontacts {
     background: transparent url(/static/images/triangle.gif) right center no-repeat;
 }
 div.nocontacts div {
-    margin: 0 85px 8px 8px;
+    margin: 8px 85px 8px 8px;
     padding: 4px 8px;
     background: #e6b3b3;
+}
+.settings div.nocontacts div {
+    margin: 0 85px 0 0;
 }
 div.nocontacts h3 {
     margin: 0;

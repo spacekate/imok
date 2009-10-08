@@ -31,10 +31,8 @@
             <form name="settingsForm"
                   id="settingsForm"
                   class="settings"
-                  onsubmit="return validateAll(this)"
+                  onsubmit="return validateAll(this);highlightSaveSettings(false);"
                   action="/settings/save/">
-
-                {% include "fragments/no_contacts.html" %}
 
                 <div class="fields">
                     <h2>My settings</h2>
@@ -94,7 +92,10 @@
             </div>
 
             <div class="sample">
-                <p class="button"><input class="submit" type="submit" value="save settings" /></p>
+
+                {% include "fragments/no_contacts.html" %}
+                
+                <p name="saveSettings" class="button"><span class="instructions hidden">click Save Settings to keep your changes -> </span><input class="submit" type="submit" value="Save Settings" /></p>
 
                 <h3>Sample Alert Email</h3>
 
@@ -111,7 +112,7 @@
                 <div id="unmonitored" class="hidden"><strong>You have selected "do not monitor me", so
                     you will not be monitored and no emails will be sent.</strong></div>
 
-                <p class="button"><input class="submit" type="submit" value="save settings" /></p>
+                <p name="saveSettings" class="button"><span class="instructions hidden">click Save Settings to keep your changes -> </span><input class="submit" type="submit" value="Save Settings" /></p>
             </div>
 
             <div class="block"></div>

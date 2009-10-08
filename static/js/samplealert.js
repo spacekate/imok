@@ -22,16 +22,20 @@ function setupAlert() {
                 if (monitored) {
                     refreshAlert(this);
                 }
+                highlightSaveSettings(true);
             });
         }
         else // set events for all other fields
         {
             dojo.connect(fields[i], "onkeyup", function() {
                 refreshAlert(this);
+                highlightSaveSettings(true);
             });
             dojo.connect(fields[i], "onchange", function() {
                 refreshAlert(this);
-            });        }
+                highlightSaveSettings(true);
+            });
+        }
 
         // set additional events for phone number fields
         if (fields[i].name == "phone" || fields[i].name == "mobile") {
@@ -62,6 +66,27 @@ function setupAlert() {
 
         refreshAlert(fields[i]);
     }
+}
+
+function highlightSaveSettings(highlight) {
+    dojo.forEach(dojo.query('[name=saveSettings]'), function(saveSettings) {
+        //var instructions = dojo.query('.instructions')[0];
+        if (highlight) {
+            dojo.addClass(saveSettings, 'problem');
+        } else {
+            dojo.removeClass(saveSettings, 'problem');
+        }
+
+        dojo.forEach(dojo.query('.instructions', saveSettings), function(instructions) {
+            if (highlight) {
+                dojo.removeClass(instructions, 'hidden');
+            } else {
+                dojo.addClass(instructions, 'hidden');
+            }
+        });
+    });
+
+
 }
 
 function refreshTimeout(field) {
