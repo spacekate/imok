@@ -10,6 +10,7 @@ import logging
 import mimetypes
 import urllib
 import demjson
+import logging
 
 from datetime import datetime
 from html2text import html2text
@@ -69,8 +70,24 @@ class ReqHandler(webapp.RequestHandler):
 
 ### Save Handlers
 class NotificationHandler(ReqHandler):
-    def get(self):
-        customer = self.getAccount()
+    def notify(self, vendorId, deviceId, customer=None):
+        if (customer):
+            self.notifyCustomer(customer)
+        else:
+            sourceQuery = Source.gql("WHERE vendorId =:1 and deviceId = :2 ", vendorId, deviceId)
+            sourceResults = sourceQuery.fetch(1)
+            for source in sourceResults:
+                self.notifyCustomer(source.customer)
+                customer=source.cutomer
+           
+        notification = Notification()
+        notification.vendorId = vendorId
+        notification.deviceId = deviceId
+        notification.dateTime=datetime.utcnow()
+        notification.customer=customer
+        notification.put()
+
+    def notifyCustomer(self, customer):
         customer.notify()
         customer.put()
         alertQuery = Alert.gql("WHERE customer =:1 and closed = :2 LIMIT 1", customer, False)
@@ -78,22 +95,18 @@ class NotificationHandler(ReqHandler):
         if (alert):
             alert.closed=True
             alert.put()
+class WebNotificationHandler(NotificationHandler):
+    def get(self):
+        customer = self.getAccount()
+        self.notify("website", str(customer.key().id()), customer)        
         self.redirect('/account.html')
         
-class ExternalNotificationHandler(ReqHandler):
+class ExternalNotificationHandler(NotificationHandler):
     def get(self):
-        notification = Notification()
-        notification.vendorId = self.request.get('vendorId')
-        notification.deviceId = self.request.get('deviceId')
-        notification.dateTime=datetime.utcnow()
-        notification.put()
+        vendorId = self.request.get('vendorId')
+        deviceId = self.request.get('deviceId')
+        self.notify(vendorId, deviceId)
         
-        # Find the customer(s) with the given source and notify them.
-        sourceQuery = Source.gql("WHERE vendorId =:1 and deviceId = :2 ", notification.vendorId, notification.deviceId)
-        sourceResults = sourceQuery.fetch(50)
-        for source in sourceResults:
-            source.customer.notify()
-            source.customer.put()
         self.redirect('/account.html')
         
 class SaveSettingsHandler(ReqHandler):
@@ -191,24 +204,14 @@ class AlertPageHandler(ReqHandler):
         else:
             self.error(404)
             self.template('alert_not_found.html', {})
-class AccountHandler(ReqHandler):
-    def get(self):
-        account = self.getAccount()
-        if (account):
-            values={
-            'account': account,
-            'timeSinceNotification': (datetime.utcnow() - self.getAccount().lastNotificationDate)
-            }
-            self.template('account.html', values)
-        else:
-            self.redirect('/signup.html')
 
-class FrontPageHandler(ReqHandler):
-    def get(self):
-        if (users.get_current_user()):
-            self.redirect('/account.html')
-        else:
-            self.template('index.html', {})
+
+#class FrontPageHandler(ReqHandler):
+#    def get(self):
+#        if (users.get_current_user()):
+#            self.redirect('/account.html')
+#        else:
+#            self.template('index.html', {})
 
 class FallbackHandler(ReqHandler):
   def get(self):
@@ -223,21 +226,14 @@ class FallbackHandler(ReqHandler):
             logging.debug ("template: %s" % template_name)
     account = self.getAccount()
     if (account):
-        # create fake customer to be used on the settings page
-        fakeCustomer = {'name': '<span name="nameSample"></span>',
-                'timeSinceNotification': '<span name="timeoutSample"></span>',
-                'phone': '<span name="phoneSample"></span>',
-                'mobile': '<span name="mobileSample"></span>',
-                'comment': '<textarea id="comment" name="comment" class="comment" rows="10" cols="10">%s</textarea>' % account.comment,
-                }
-        fakeAlert = {
-                     'key': {'id':'fake'}, 
-                     'check' : 'fake',
-                    }
+        logging.debug('looking for notifications')
+        notificationQuery = Notification.gql("WHERE customer =:1 ORDER BY dateTime DESC", account)
+        notificationResults = notificationQuery.fetch(10)
         values={
+        'notifications': notificationResults,
         'account': account,
-        'customer': fakeCustomer,
-        'alert': fakeAlert,
+        'customer': Constants().fakeCustomer(account),
+        'alert': Constants().fakeAlert(account),
         'timeSinceNotification': (datetime.utcnow() - self.getAccount().lastNotificationDate)
         }            
     self.template(template_name, values)
@@ -247,9 +243,8 @@ def main():
                   [
                    # ('/signup/save/', SignupHandler),
                    #('/signup.html', SignupPageHandler),
-                   ('/notify', NotificationHandler),
-                   ('/', FrontPageHandler),
-                   ('/account.html', AccountHandler),
+                   ('/notify', WebNotificationHandler),
+#                   ('/', FrontPageHandler),
                    ('/contact/list/', ListContactHandler),
                    ('/contact/add/', NewContactHandler),
                    ('/contact/delete/', DeleteContactHandler),

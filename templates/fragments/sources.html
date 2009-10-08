@@ -1,10 +1,9 @@
 <div class="sources">
     <h2>Recent Check-ins</h2>
     <ul>
-        <li>Yesterday at 11:15am</li>
-        <li>Sunday at 2:58pm</li>
-        <li>Saturday at 3:02pm</li>
-        <li>Friday at 5:18pm</li>
+{% for notification in notifications %}
+    <li>{{ notification.timeSinceNotification }} ago.</li>
+{% endfor %}    
     </ul>
 
     <!--
