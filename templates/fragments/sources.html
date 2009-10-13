@@ -2,7 +2,7 @@
     <h2>Recent Check-ins</h2>
     <ul>
 {% for notification in notifications %}
-    <li>{{ notification.notificationTime }}</li>
+    <li>{{ notification.timeSinceNotification }} ago.</li>
 {% endfor %}    
     </ul>
 

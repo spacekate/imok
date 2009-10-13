@@ -93,7 +93,12 @@ function refreshAlert(field) {
         var newValue = field.value;
 
         if (field.name == "timeout") {
-            newValue = (newValue / 60) + " hours";
+            var tmpValue = newValue / 60;
+            if (tmpValue < 1) {
+                tmpValue=tmpValue.toFixed(2);
+            }
+            newValue = tmpValue + " hours";
+ 
         }
 
         if (field.name == "phone"  || field.name == "mobile") {
