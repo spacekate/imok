@@ -11,6 +11,9 @@ import mimetypes
 import urllib
 import demjson
 import logging
+import random
+import base64
+import Cookie
 
 from datetime import datetime
 from html2text import html2text
@@ -21,32 +24,101 @@ from google.appengine.ext import db
 from google.appengine.api import users
 from google.appengine.api import urlfetch
 from google.appengine.api import mail
+from google.appengine.api import memcache
 
 from models import *
 from constants import *
 
 ### Base Classes
+class RedirectException(Exception):
+     def __init__(self, url):
+         self.url = url
+     def __str__(self):
+         return repr(self.url)
+     
 class ReqHandler(webapp.RequestHandler):
-    def getAccount(self):
-        if (not users.get_current_user()):
-            return None
-        accountQuery = Customer.gql("WHERE account = :1 LIMIT 1",
-                               users.get_current_user())
+    def post(self):
+        self.get()
+    def get(self):
+        try:
+            self.process()
+        except RedirectException, e:
+            self.redirect(e.url)
+
+    def setCookie(self, key, value, ):
+         simpleCookieObj = Cookie.SimpleCookie()
+
+         simpleCookieObj[key] = str(base64.b64encode(value))
+         simpleCookieObj[key]['expires'] = 360
+         simpleCookieObj[key]['path'] = '/'
+         #simpleCookieObj[key]['domain'] = self.domain
+         #simpleCookieObj[key]['secure'] = ''
+
+         #Cookie.SimpleCookie's output doesn't seem to be compatible with WebApps's http header functions
+         #and this is a dirty fix
+
+         headerStr = simpleCookieObj.output()
+         regExObj = re.compile('^Set-Cookie: ')
+         self.response.headers.add_header('Set-Cookie', str(regExObj.sub('', headerStr, count=1)))
+
         
+    def login(self, username, password, sucessUrl):    
+        account= self.getAccountFromLogin(username, password)
+        if (account):
+            # create a cookie key
+            rnd = random.random()
+            id  = account.key().id()
+            cookieKey = "%s-%s" %(rnd, id)
+            # set the cookie on the web client
+            logging.debug("setting cookie: imok-token=%s" % cookieKey)
+            self.setCookie('imok-token', cookieKey)
+            
+            memcache.add(namespace='imok-token', key=cookieKey, value=account, time=3600)
+            self.redirect(sucessUrl)
+        else:
+            params={
+                    'message' : "The username and pssword did not match",
+                    'sucessUrl': sucessUrl,
+            }
+            url = "/login.html?%s" %(urllib.urlencode(params))
+            self.redirect(url)
+            
+    def getAccountFromLogin(self, username, password):
+        accountQuery = Customer.gql("WHERE username = :1 LIMIT 1",
+                                   username)
         account = accountQuery.get()
-        if (not account):
-            customer = Customer()
-            customer.account = users.get_current_user()
-            customer.name = customer.account.nickname()
-            customer.email = customer.account.email()
-            customer.timeout=24*60   #24 hours * 60 mins
-            customer.phone=''
-            customer.mobile=''
-            customer.comment=''
-            customer.notify()
-            customer.put()
-            account=customer
         return account
+    def getAccount(self, redirectOnFailure=True):
+        # get the cookie
+        cookieKey =''
+        try:
+             cookieKey = str(base64.b64decode(self.request.cookies['imok-token']))
+        except KeyError:
+             #There wasn't a Cookie called that
+             pass
+        
+        logging.debug("found cookie: imok-token=%s" % cookieKey)
+
+        # get the account from memcache
+        account=None
+        if (cookieKey):
+            account = memcache.get(cookieKey, namespace='imok-token')
+        if (account):
+            return account
+        if (redirectOnFailure):
+            self.redirectToLogin("/account.html", "login timed out")
+        else:
+            return None
+
+    def redirectToLogin(self, sucessUrl, message=''):
+            params={
+                    'message' : message,
+                    'sucessUrl': sucessUrl,
+            }
+            url = "/login.html?%s" %(urllib.urlencode(params))
+            raise RedirectException(url)
+            #self.redirect(url)      
+    
     def getJsonContacts(self, message=''):
         account = self.getAccount()
         contacts = []
@@ -96,13 +168,15 @@ class NotificationHandler(ReqHandler):
             alert.closed=True
             alert.put()
 class WebNotificationHandler(NotificationHandler):
-    def get(self):
+    def process(self):
         customer = self.getAccount()
-        self.notify("website", str(customer.key().id()), customer)        
+        logging.debug("Customer: %s" %str(customer))
+        deviceId = str(customer.key().id())
+        self.notify("website", deviceId, customer)        
         self.redirect('/account.html')
         
 class ExternalNotificationHandler(NotificationHandler):
-    def get(self):
+    def process(self):
         vendorId = self.request.get('vendorId')
         deviceId = self.request.get('deviceId')
         self.notify(vendorId, deviceId)
@@ -110,7 +184,7 @@ class ExternalNotificationHandler(NotificationHandler):
         self.redirect('/account.html')
         
 class SaveSettingsHandler(ReqHandler):
-    def get(self):
+    def process(self):
         customer = self.getAccount()
         
         customer.name   = self.request.get('name', customer.name)
@@ -122,10 +196,9 @@ class SaveSettingsHandler(ReqHandler):
 
         customer.put()
         self.redirect('/settings.html')
-
         
 class NewContactHandler(ReqHandler):
-    def get(self):
+    def process(self):
         contact = Contact()
         contact.customer=self.getAccount()
         contact.email=self.request.get('newContact')
@@ -168,14 +241,14 @@ class UpdateContactHandler(ReqHandler):
         self.template("%s.html" % status, values)
             
 class ContactDeclineHandler(UpdateContactHandler):
-    def get(self):
+    def process(self):
         self.update('declined')
 class ContactAcceptHandler(UpdateContactHandler):
-    def get(self):
+    def process(self):
         self.update('active')
         
 class DeleteContactHandler(ReqHandler):
-    def get(self):
+    def process(self):
         contact_key = self.request.get('contactId')
         contact= db.get(db.Key(contact_key))
         message=None
@@ -188,11 +261,11 @@ class DeleteContactHandler(ReqHandler):
         
 ### Web Handlers
 class ListContactHandler(ReqHandler):
-    def get(self):
+    def process(self):
         self.response.out.write(self.getJsonContacts(message=''))
         
 class AlertPageHandler(ReqHandler):
-    def get(self):
+    def process(self):
         alertId = self.request.get('alertId')
         (alertKey, a, alertCheck) = alertId.partition('-')
         key = db.Key.from_path('Alert', int(alertKey))
@@ -207,39 +280,85 @@ class AlertPageHandler(ReqHandler):
 
 
 #class FrontPageHandler(ReqHandler):
-#    def get(self):
+#    def process(self):
 #        if (users.get_current_user()):
 #            self.redirect('/account.html')
 #        else:
 #            self.template('index.html', {})
+class RegisterHandler(ReqHandler):
+    def process(self):
+        username = self.request.get('username')
+        password = self.request.get('password')
+        name = self.request.get('name')
+        email = self.request.get('email')
+        sucessUrl= self.request.get('sucess_url')
+
+        accountQuery = Customer.gql("WHERE username = :1 LIMIT 1",
+                                   username)
+        account = accountQuery.get()        
+        if (not account):
+            customer = Customer()
+            customer.username = username
+            customer.password = password
+            customer.name = name
+            customer.email = email
+            customer.timeout=24*60   #24 hours * 60 mins
+            customer.phone=''
+            customer.mobile=''
+            customer.comment=''
+            customer.notify()
+            customer.put()
+            account=customer
+            self.redirect(sucessUrl)
+        else:
+            params={
+                    'message' : "The username is already in use",
+                    'sucessUrl': sucessUrl,
+            }
+            url = "/register.html?%s" %(urllib.urlencode(params))
+            self.redirect(url)            
+class LoginHandler(ReqHandler):
+    def process(self):
+        username = self.request.get('username')
+        password = self.request.get('password')
+        sucessUrl= self.request.get('sucess_url')
+        self.login(username, password, sucessUrl)
+        
 
 class FallbackHandler(ReqHandler):
-  def get(self):
-    template_name = 'index.html'
-    values = {}
-    url = self.request.path
-    match = re.match("/(.*)$", url)
-    if match:
-        name=match.groups()[0]
-        if name:
-            template_name=name
-            logging.debug ("template: %s" % template_name)
-    account = self.getAccount()
-    if (account):
-        logging.debug('looking for notifications')
-        notificationQuery = Notification.gql("WHERE customer =:1 ORDER BY dateTime DESC", account)
-        notificationResults = notificationQuery.fetch(10)
-        values={
-        'notifications': notificationResults,
-        'account': account,
-        'customer': Constants().fakeCustomer(account),
-        'alert': Constants().fakeAlert(account),
-        'timeSinceNotification': (datetime.utcnow() - self.getAccount().lastNotificationDate)
-        }            
-    self.template(template_name, values)
+    def process(self):
+        template_name = 'index.html'
+        values = {}
+        url = self.request.path
+        match = re.match("/(.*)$", url)
+        if match:
+            name=match.groups()[0]
+            if name:
+                template_name=name
+                logging.debug ("template: %s" % template_name)
+        account = self.getAccount(redirectOnFailure=False)
+        if (account):
+            logging.debug('looking for notifications')
+            notificationQuery = Notification.gql("WHERE customer =:1 ORDER BY dateTime DESC", account)
+            notificationResults = notificationQuery.fetch(10)
+            values={
+            'notifications': notificationResults,
+            'account': account,
+            'customer': Constants().fakeCustomer(account),
+            'alert': Constants().fakeAlert(account),
+            'timeSinceNotification': (datetime.utcnow() - self.getAccount().lastNotificationDate)
+            }
+        values['args'] = self.getArgs() 
+        self.template(template_name, values)
+
+    def getArgs(self):
+        args={}
+        for i in self.request.arguments():
+            args[i] = self.request.get(i)
+        return args
 
 def main():
-  application = webapp.WSGIApplication(
+    application = webapp.WSGIApplication(
                   [
                    # ('/signup/save/', SignupHandler),
                    #('/signup.html', SignupPageHandler),
@@ -252,12 +371,14 @@ def main():
                    ('/contact/accept', ContactAcceptHandler),
                    ('/settings/save/', SaveSettingsHandler),
                    ('/alert', AlertPageHandler),
+                   ('/login/', LoginHandler),
+                   ('/register/', RegisterHandler),
                    ('/notification/', ExternalNotificationHandler),
                    ('.*', FallbackHandler),
                   ]
           )
-  wsgiref.handlers.CGIHandler().run(application)
+    wsgiref.handlers.CGIHandler().run(application)
 
 
 if __name__ == '__main__':
-  main()
+    main()

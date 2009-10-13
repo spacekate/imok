@@ -1,0 +1,12 @@
+<form action="/login/" method="post">
+
+{% if args.message %}<p>
+   Note:  {{args.message}}
+</p>{% endif %}
+
+<input type="hidden" name="sucess_url" value="{% if args.sucess_url %}{{args.sucess_url}}{% else %}/account.html{% endif %}" />
+ 
+Username: <input type="text" id="username" name="username" class="username" /><br />
+Password: <input type="password" id="password" name="password" class="password" /><br />
+<input type="submit" id="login" name="login" class="login" value="login"/>
+</form>

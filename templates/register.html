@@ -1,0 +1,16 @@
+<form action="/register/" method="post">
+
+{% if args.message %}<p>
+   Note:  {{args.message}}
+</p>{% endif %}
+
+<input type="hidden" name="sucess_url" value="{% if args.sucess_url %}{{args.sucess_url}}{% else %}/account.html{% endif %}" />
+ 
+Username: <input type="text" id="username" name="username" class="username" /><br />
+Password: <input type="password" id="password" name="password" class="password" /><br />
+
+Name: <input type="text" id="name" name="name" class="name" /><br />
+Email: <input type="text" id="email" name="email" class="email" /><br />
+
+<input type="submit" id="create" name="create" class="create" value="create"/>
+</form>
