@@ -56,10 +56,10 @@ class ReqHandler(webapp.RequestHandler):
 
          #Cookie.SimpleCookie's output doesn't seem to be compatible with WebApps's http header functions
          #and this is a dirty fix
-
          headerStr = simpleCookieObj.output()
          regExObj = re.compile('^Set-Cookie: ')
-         self.response.headers.add_header('Set-Cookie', str(regExObj.sub('', headerStr, count=1)))
+         cookie = str(regExObj.sub('', headerStr, count=1))
+         self.response.headers.add_header('Set-Cookie', cookie)
 
         
     def login(self, username, password, sucessUrl):    
@@ -327,6 +327,7 @@ class LoginHandler(ReqHandler):
 
 class FallbackHandler(ReqHandler):
     def process(self):
+        authRequired = ('account.html', 'settings.html')
         template_name = 'index.html'
         values = {}
         url = self.request.path
@@ -337,6 +338,8 @@ class FallbackHandler(ReqHandler):
                 template_name=name
                 logging.debug ("template: %s" % template_name)
         account = self.getAccount(redirectOnFailure=False)
+        if (not account and template_name in authRequired):
+            self.redirectToLogin("/%s"%template_name, "login required")
         if (account):
             logging.debug('looking for notifications')
             notificationQuery = Notification.gql("WHERE customer =:1 ORDER BY dateTime DESC", account)
