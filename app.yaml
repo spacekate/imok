@@ -17,17 +17,17 @@ handlers:
   static_files: static/images/favicon.ico
   upload: static/images/favicon.ico
   
-- url: /signup.html
-  script: main.py
-  login: required
-
-- url: /account.html
-  script: main.py
-  login: required
-
-- url: /settings.html
-  script: main.py
-  login: required
+#- url: /signup.html
+#  script: main.py
+#  login: required
+#
+#- url: /account.html
+#  script: main.py
+#  login: required
+#
+#- url: /settings.html
+#  script: main.py
+#  login: required
 
 - url: /worker/
   script: worker.py

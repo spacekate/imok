@@ -9,7 +9,10 @@ from util import *
 END_OF_TIME=datetime.max
 ### Models
 class Customer(db.Model):
-    account = db.UserProperty()
+    #account = db.UserProperty()
+    username = db.StringProperty()
+    password= db.StringProperty()
+    
     name = db.StringProperty()
     phone = db.StringProperty()
     mobile = db.StringProperty()
