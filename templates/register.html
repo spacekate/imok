@@ -1,16 +1,117 @@
-<form action="/register/" method="post">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>I'm OK!</title>
+        {% include "fragments/head.html" %}
 
-{% if args.message %}<p>
-   Note:  {{args.message}}
-</p>{% endif %}
+        <script type="text/javascript" src="/static/js/form.js"></script>
+        <script type="text/javascript" src="/static/js/contactlist.js"></script>
+        <script type="text/javascript" src="/static/js/samplealert.js"></script>
 
-<input type="hidden" name="sucess_url" value="{% if args.sucess_url %}{{args.sucess_url}}{% else %}/account.html{% endif %}" />
- 
-Username: <input type="text" id="username" name="username" class="username" /><br />
-Password: <input type="password" id="password" name="password" class="password" /><br />
+        <script type="text.javascript">
+            function validateForm(form) {
+                if (!validateText(this.firstName)) {
 
-Name: <input type="text" id="name" name="name" class="name" /><br />
-Email: <input type="text" id="email" name="email" class="email" /><br />
+                }
+                return true;
+            }
+        </script>
 
-<input type="submit" id="create" name="create" class="create" value="create"/>
-</form>
+	</head>
+
+    <body>
+
+		{% include "fragments/menu.html" %}
+        <div class="container">
+
+            <div class="content">
+
+                <form name="registrationForm"
+                      id="registrationForm"
+                      class="register"
+                      onsubmit="return validateAll(this);highlightSaveSettings(false);"
+                      action="/register/">
+
+                    <input type="hidden" name="sucess_url" value="{% if args.sucess_url %}{{args.sucess_url}}{% else %}/account.html{% endif %}" />
+
+
+                {% if args.message %}<p>Note: {{args.message}}</p>{% endif %}
+
+                    <h2>Register</h2>
+
+                    <table cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                           <td name="usernameComment" class="hidden error"><label for="username">Please choose a username</label></td>
+                       </tr>
+                        <tr>
+                           <td class="highlightable"><span><label for="username">Username:</label>
+                               <br /><input id="username" name="username" class="name validate aggressiveValidate" /></span></td>
+                        </tr>
+                        <tr>
+                           <td name="passwordComment" class="hidden error"><label for="password">Please choose a password</label></td>
+                       </tr>
+                        <tr>
+                           <td class="highlightable"><span><label for="password">Password:</label>
+                               <br /><input type="password" id="password" name="password" class="name validate aggressiveValidate" /></span></td>
+                        </tr>
+                        <tr>
+                           <td name="retypePasswordComment" class="hidden error"><label for="retypePassword">Please retype your password</label></td>
+                       </tr>
+                        <tr>
+                           <td class="highlightable"><span><label for="retypePassword">Password:</label>
+                               <br /><input type="password" id="retypePassword" name="retypePassword" class="name validate aggressiveValidate" /></span></td>
+                        </tr>
+                        <tr>
+                           <td name="nameComment" class="hidden error"><label for="name">Please enter your name</label></td>
+                       </tr>
+                        <tr>
+                           <td class="highlightable"><span><label for="name">Name:</label>
+                               <br /><input id="name" name="name" class="name validate aggressiveValidate" /></span></td>
+                        </tr>
+
+                        <tr>
+                           <td name="emailComment" class="hidden error"><label for="email">Please enter a valid email</label></td>
+                       </tr>
+                        <tr>
+                           <td class="highlightable"><span><label for="email">Email:</label>
+                               <br /><input id="email" name="email" class="email validate aggressiveValidate" /></span></td>
+                        </tr>
+
+                        <tr>
+                           <td class="highlightable"><span><label for="phone">Home phone:</label>
+                               <br /><input id="phone" name="phone" class="phone" /></span></td>
+                        </tr>
+
+                        <tr>
+                           <td class="highlightable"><span><label for="mobile">Mobile:</label>
+                               <br /><input id="mobile" name="mobile" class="phone" /></span></td>
+                        </tr>
+
+                        <tr>
+                            <td><input type="submit" id="create" name="create" class="create" value="create"/></td>
+                        </tr>
+                   </table>
+
+
+                <!-- detail notes for form fields -->
+                <div id="usernameDetail" class="detail hidden">You will need this username each time you login to I'm OK!</div>
+                <div id="passwordDetail" class="detail hidden">You will need your password each time you login to I'm OK!</div>
+                <div id="retypePasswordDetail" class="detail hidden">We ask you to retype your password to ensure there are no typos.</div>
+                <div id="nameDetail" class="detail hidden">We will refer to you by this name in
+                    any emails we send to your contacts.</div>
+                <div id="emailDetail" class="detail hidden">We will send information and notification
+                    emails to you at this address.</div>
+                <div id="phoneDetail" class="detail hidden">If we need to send an alert to your contacts, we will
+                    include this phone number so they can make sure you're OK.</div>
+                <div id="mobileDetail" class="detail hidden">If we need to send an alert to your contacts, we will
+                    include this mobile number so they can make sure you're OK.</div>
+                <div id="sendRmeinders" class="detail hidden">We can send you an email to remind you to check-in.</div>
+
+                </form>
+            </div>
+        </div>
+
+        {% include "fragments/footer.html" %}
+
+	</body>
+</html>

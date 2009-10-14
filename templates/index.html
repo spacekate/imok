@@ -9,17 +9,15 @@
 	<body>	
 
 		{% include "fragments/menu.html" %}
+        <div class="container">
+		    <div class="leftpanel">{% include "fragments/login.html" %}</div>
 
-        <div class="content">
-        <p>
-            We keep watch over you, alerting your friends and family if you get into trouble.
-		</p>
-		<p>
-            <a href="/account.html">Signup</a> using your google account.
-        </p>
+            <div class="content">
+                <p>We keep watch over you, alerting your friends and family if you get into trouble.</p>
+            </div>
         </div>
 
-		{% include "fragments/footer.html" %}
+        {% include "fragments/footer.html" %}
 
 	</body>
 </html>

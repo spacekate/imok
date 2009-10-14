@@ -1,13 +1,35 @@
-<form action="/login/" method="post">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>I'm OK!</title>
+        {% include "fragments/head.html" %}
 
-{% if args.message %}<p>
-   Note:  {{args.message}}
-</p>{% endif %}
+        <script type="text/javascript" src="/static/js/form.js"></script>
+        <script type="text/javascript" src="/static/js/contactlist.js"></script>
+        <script type="text/javascript" src="/static/js/samplealert.js"></script>
 
-<input type="hidden" name="sucess_url" value="{% if args.sucess_url %}{{args.sucess_url}}{% else %}/account.html{% endif %}" />
- 
-Username: <input type="text" id="username" name="username" class="username" /><br />
-Password: <input type="password" id="password" name="password" class="password" /><br />
-<input type="submit" id="login" name="login" class="login" value="login"/>
-</form>
-If you do not yet have an account, <a href="/register.html">Register here</a>.
+        <script type="text.javascript">
+            function validateForm(form) {
+                if (!validateText(this.firstName)) {
+
+                }
+                return true;
+            }
+        </script>
+
+	</head>
+
+    <body>
+		{% include "fragments/menu.html" %}
+
+        <div class="container">
+            <div class="content">
+
+                {% include "fragments/login.html" %}
+
+            </div>
+        </div>
+
+        {% include "fragments/footer.html" %}
+	</body>
+</html>

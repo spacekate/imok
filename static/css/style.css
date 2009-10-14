@@ -12,7 +12,7 @@ body {
 }
 .container .content,
 .container .contactlist,
-.container .sources,
+.container .leftpanel,
 .container .settings, 
 .container .settings .fields {
     padding-bottom: 2010px;
@@ -214,8 +214,8 @@ div.contactlist dl dd {
     padding-left: 1em;
 }
 
-/**** sources styles ****/
-div.sources {
+/**** leftpanel styles ****/
+div.leftpanel {
     float: left;
     width: 150px;
     /* don't define margin-bottom here, it's up in the container section */
@@ -223,27 +223,56 @@ div.sources {
     color: #9D6934;
     background: #F8F2EC;
 }
-div.sources h2 {
+div.leftpanel h2 {
     color: #B0753B;
 }
-div.sources ul {
+div.leftpanel ul {
     margin: 0;
     padding: 0;
     list-style: none;
 }
-div.sources ul li {
+div.leftpanel ul li {
     margin: 0 0 0.5em 0;
     padding: 0;
     border-bottom: 1px solid #D7B593;
 }
 
-div.sources .highlight,
-div.sources table tr.highlight td {
+div.leftpanel .highlight,
+div.leftpanel table tr.highlight td {
     background: #E6CDB3;
 }
-div.sources table tr.problem td.error {
+div.leftpanel table tr.problem td.error {
     color: #fff;
     background: #c33;
+}
+
+/**** register styles ****/
+form.register {
+    padding: 0 5px 5px 7px;
+}
+form.register h2 {
+    margin-bottom: 0.5em;
+}
+form.register table {
+    width: 185px;
+}
+form.register table tr td {
+    padding: 6px 3px 6px 2px;
+    line-height: 1.2em;
+}
+form.register .highlight,
+form.register table tr.highlight td {
+    background: #CBE6B3;
+}
+form.register .problem .error,
+form.register table tr.problem td.error {
+    color: #fff;
+    background: #c33;
+}
+form.register div.detail {
+    color: #59862D;
+    background: #F2F8EC;
+    border: 1px solid #59862D;
 }
 
 /**** settings styles ****/
