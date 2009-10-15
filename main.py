@@ -85,7 +85,7 @@ class ReqHandler(webapp.RequestHandler):
             self.redirect(sucessUrl)
         else:
             params={
-                    'message' : "The username and pssword did not match",
+                    'message' : "The username and password did not match",
                     'sucessUrl': sucessUrl,
             }
             url = "/login.html?%s" %(urllib.urlencode(params))
