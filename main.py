@@ -14,6 +14,7 @@ import logging
 import random
 import base64
 import Cookie
+import hashlib
 
 from datetime import datetime
 from html2text import html2text
@@ -45,22 +46,29 @@ class ReqHandler(webapp.RequestHandler):
         except RedirectException, e:
             self.redirect(e.url)
 
-    def setCookie(self, key, value, ):
-         simpleCookieObj = Cookie.SimpleCookie()
+    def getHash(self, word):
+        return hashlib.sha224(word).hexdigest()
 
-         simpleCookieObj[key] = str(base64.b64encode(value))
-         simpleCookieObj[key]['expires'] = 360
-         simpleCookieObj[key]['path'] = '/'
-         #simpleCookieObj[key]['domain'] = self.domain
-         #simpleCookieObj[key]['secure'] = ''
+    def setCookie(self, key, value, expires=Constants().loginCookieExpiry()):
+         simpleCookie = Cookie.SimpleCookie()
 
-         #Cookie.SimpleCookie's output doesn't seem to be compatible with WebApps's http header functions
-         #and this is a dirty fix
-         headerStr = simpleCookieObj.output()
-         regExObj = re.compile('^Set-Cookie: ')
-         cookie = str(regExObj.sub('', headerStr, count=1))
+         simpleCookie[key] = str(base64.b64encode(value))
+         simpleCookie[key]['expires'] = expires
+         simpleCookie[key]['path'] = '/'
+         #simpleCookie[key]['domain'] = Constants().domain()
+         
+         # Get the cookie without the header name as that is 
+         # supplied to the add_header call separately.
+         cookie = simpleCookie.output(header='')
+
          self.response.headers.add_header('Set-Cookie', cookie)
 
+    def logout(self, sucessUrl):    
+        cookieKey = self.getLoginCookie()
+        if (cookieKey):
+            accountKey = memcache.delete(cookieKey, namespace='imok-token')
+        self.setCookie('imok-token', '', -99999)
+        self.redirect(sucessUrl)
         
     def login(self, username, password, sucessUrl):    
         account= self.getAccountFromLogin(username, password)
@@ -73,7 +81,7 @@ class ReqHandler(webapp.RequestHandler):
             logging.debug("setting cookie: imok-token=%s" % cookieKey)
             self.setCookie('imok-token', cookieKey)
             
-            memcache.add(namespace='imok-token', key=cookieKey, value=account, time=3600)
+            memcache.add(namespace='imok-token', key=cookieKey, value=account.key(), time=3600)
             self.redirect(sucessUrl)
         else:
             params={
@@ -87,8 +95,11 @@ class ReqHandler(webapp.RequestHandler):
         accountQuery = Customer.gql("WHERE username = :1 LIMIT 1",
                                    username)
         account = accountQuery.get()
+        passwordHash = self.getHash(password)
+        if (account and passwordHash != account.passwordHash):
+            account = None
         return account
-    def getAccount(self, redirectOnFailure=True):
+    def getLoginCookie(self):
         # get the cookie
         cookieKey =''
         try:
@@ -98,11 +109,17 @@ class ReqHandler(webapp.RequestHandler):
              pass
         
         logging.debug("found cookie: imok-token=%s" % cookieKey)
+        return cookieKey
 
+    def getAccount(self, redirectOnFailure=True):
+        cookieKey = self.getLoginCookie()
         # get the account from memcache
         account=None
         if (cookieKey):
-            account = memcache.get(cookieKey, namespace='imok-token')
+            accountKey = memcache.get(cookieKey, namespace='imok-token')
+            account=None
+            if (accountKey):
+                account = db.get(accountKey)
         if (account):
             return account
         if (redirectOnFailure):
@@ -132,35 +149,37 @@ class ReqHandler(webapp.RequestHandler):
         self.response.out.write(self.getTemplate(templateName, values))
 
     def getTemplate(self, templateName, values):
-        if (users.get_current_user()):
-            values['logoutLink'] = users.create_logout_url("/")
-        if (users.is_current_user_admin()):
-            values['isAdmin'] = True
         values['domain'] = Constants().domain()
+        account = values.get('account')
+        if (account):
+            values['logoutLink'] = '/logout/'
+            if account.username =='hamish' or account.username =='spacekate':
+                values['isAdmin'] = True
         path = os.path.join(os.path.dirname(__file__),'templates', templateName)
         return (template.render(path, values))
 
 ### Save Handlers
 class NotificationHandler(ReqHandler):
     def notify(self, vendorId, deviceId, customer=None):
+        now = datetime.utcnow()
         if (customer):
-            self.notifyCustomer(customer)
+            self.notifyCustomer(customer, now)
         else:
             sourceQuery = Source.gql("WHERE vendorId =:1 and deviceId = :2 ", vendorId, deviceId)
             sourceResults = sourceQuery.fetch(1)
             for source in sourceResults:
-                self.notifyCustomer(source.customer)
+                self.notifyCustomer(source.customer, now)
                 customer=source.cutomer
            
         notification = Notification()
         notification.vendorId = vendorId
         notification.deviceId = deviceId
-        notification.dateTime=datetime.utcnow()
+        notification.dateTime=now
         notification.customer=customer
         notification.put()
 
-    def notifyCustomer(self, customer):
-        customer.notify()
+    def notifyCustomer(self, customer, time):
+        customer.notify(time)
         customer.put()
         alertQuery = Alert.gql("WHERE customer =:1 and closed = :2 LIMIT 1", customer, False)
         alert = alertQuery.get()
@@ -172,7 +191,8 @@ class WebNotificationHandler(NotificationHandler):
         customer = self.getAccount()
         logging.debug("Customer: %s" %str(customer))
         deviceId = str(customer.key().id())
-        self.notify("website", deviceId, customer)        
+        self.notify("website", deviceId, customer)
+        
         self.redirect('/account.html')
         
 class ExternalNotificationHandler(NotificationHandler):
@@ -285,29 +305,44 @@ class AlertPageHandler(ReqHandler):
 #            self.redirect('/account.html')
 #        else:
 #            self.template('index.html', {})
-class RegisterHandler(ReqHandler):
+class RegisterHandler(NotificationHandler):
     def process(self):
         username = self.request.get('username')
         password = self.request.get('password')
+        retypePassword = self.request.get('retypePassword')
+        passwordHash = self.getHash(password)
         name = self.request.get('name')
         email = self.request.get('email')
         sucessUrl= self.request.get('sucess_url')
+        phone = self.request.get('phone')
+        mobile = self.request.get('mobile')
+
+        if (not password ==  retypePassword):
+            params={
+                    'message' : "The passwords do not match",
+                    'sucessUrl': sucessUrl,
+            }
+            url = "/register.html?%s" %(urllib.urlencode(params))
+            self.redirect(url)
+            return
 
         accountQuery = Customer.gql("WHERE username = :1 LIMIT 1",
                                    username)
-        account = accountQuery.get()        
+        account = accountQuery.get()
         if (not account):
             customer = Customer()
             customer.username = username
-            customer.password = password
+            customer.passwordHash = passwordHash
             customer.name = name
             customer.email = email
             customer.timeout=24*60   #24 hours * 60 mins
-            customer.phone=''
-            customer.mobile=''
+            customer.phone=phone
+            customer.mobile=mobile
             customer.comment=''
-            customer.notify()
+            #customer.notify()
             customer.put()
+            deviceId = str(customer.key().id())
+            self.notify("website", deviceId, customer)
             account=customer
             self.redirect(sucessUrl)
         else:
@@ -316,13 +351,18 @@ class RegisterHandler(ReqHandler):
                     'sucessUrl': sucessUrl,
             }
             url = "/register.html?%s" %(urllib.urlencode(params))
-            self.redirect(url)            
+            self.redirect(url)
 class LoginHandler(ReqHandler):
     def process(self):
         username = self.request.get('username')
         password = self.request.get('password')
         sucessUrl= self.request.get('sucess_url')
         self.login(username, password, sucessUrl)
+
+class LogoutHandler(ReqHandler):
+    def process(self):
+        sucessUrl= self.request.get('sucess_url', '/index.html')
+        self.logout(sucessUrl)
         
 
 class FallbackHandler(ReqHandler):
@@ -375,6 +415,7 @@ def main():
                    ('/settings/save/', SaveSettingsHandler),
                    ('/alert', AlertPageHandler),
                    ('/login/', LoginHandler),
+                   ('/logout/', LogoutHandler),
                    ('/register/', RegisterHandler),
                    ('/notification/', ExternalNotificationHandler),
                    ('.*', FallbackHandler),

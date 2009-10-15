@@ -11,8 +11,7 @@ END_OF_TIME=datetime.max
 class Customer(db.Model):
     #account = db.UserProperty()
     username = db.StringProperty()
-    password= db.StringProperty()
-    
+    passwordHash= db.StringProperty()
     name = db.StringProperty()
     phone = db.StringProperty()
     mobile = db.StringProperty()
@@ -27,8 +26,8 @@ class Customer(db.Model):
     def timeSinceNotification(self):
         return formatTimeDelta(datetime.utcnow() - self.lastNotificationDate)
    
-    def notify(self):
-        self.lastNotificationDate = datetime.utcnow()
+    def notify(self, time):
+        self.lastNotificationDate = time
         if (self.timeout == -1):
             self.notificationTime = END_OF_TIME
         else :

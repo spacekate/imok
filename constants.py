@@ -1,10 +1,12 @@
 import os
 
 class Constants():
+    def loginCookieExpiry(self):
+        return 60*60*24*14
     def domain(self):
         domain = os.environ['HTTP_HOST']
         if (not domain):
-            domain = "i-am-ok.appspot.com"
+            domain = "imok.currie.com.au"
         return domain
     def adminFrom(self):
         return "imok@currie.com.au"
