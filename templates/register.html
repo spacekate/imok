@@ -58,7 +58,7 @@
                            <td name="retypePasswordComment" class="hidden error"><label for="retypePassword">Please retype your password</label></td>
                        </tr>
                         <tr>
-                           <td class="highlightable"><span><label for="retypePassword">Password:</label>
+                           <td class="highlightable"><span><label for="retypePassword">Retype Password:</label>
                                <br /><input type="password" id="retypePassword" name="retypePassword" class="name validate aggressiveValidate" /></span></td>
                         </tr>
                         <tr>
@@ -88,7 +88,21 @@
                         </tr>
 
                         <tr>
-                            <td><input type="submit" id="create" name="create" class="create" value="create"/></td>
+                           <td class="highlightable"><span><label for="payment">Subscription Type:</label>
+                               <br /><select id="payment" name="subscriptionType">
+                                     <option>Monthly - $2/month</option>
+                                     <option>Annual - $20/year</option>
+                               </select></span></td>
+                        </tr>
+
+                        <tr>
+                            <td class="highlightable"><span>Payment Type:
+                                <br /><input type="radio" id="paypal" name="paymentType" checked="true" />
+                                <label for="paypal">PayPal</label></span></td>
+                        </tr>
+
+                        <tr>
+                            <td><input type="submit" id="create" name="create" class="create" value="Continue >"/></td>
                         </tr>
                    </table>
 
