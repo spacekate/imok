@@ -4,6 +4,10 @@ runtime: python
 api_version: 1
 
 handlers:
+- url: /test.*
+  login: admin
+  script: gaeunit.py
+
 - url: /console/static
   static_dir: console/app/view/static
 
@@ -31,6 +35,6 @@ handlers:
 
 - url: /worker/
   script: worker.py
-
+  
 - url: .*
   script: main.py
