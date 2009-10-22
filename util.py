@@ -27,15 +27,15 @@ def formatTimeDelta(delta, weekLabel='week', dayLabel='day', hourLabel='hour', m
 def abbreviatedTimeDelta(delta):
     return formatTimeDelta(delta, minLabel='min', secLabel='sec')
 
-def formatTimeWithReference(reference, theTime):
-    delta = reference.date() - theTime.date()
-    deltaDays = delta.days
-    if (deltaDays==0):
-        return theTime.strftime("Today %I:%M %p")
-    if (deltaDays==1):
-        return theTime.strftime("Yesterday %I:%M %p")
-    if (deltaDays >0 and deltaDays < 7):
-        return theTime.strftime("%A %I:%M %p")
-    else:
-        return theTime.strftime("%A %d %b %I:%M %p")    
-    
+#def formatTimeWithReference(reference, theTime):
+#    delta = reference.date() - theTime.date()
+#    deltaDays = delta.days
+#    if (deltaDays==0):
+#        return theTime.strftime("Today %I:%M %p")
+#    if (deltaDays==1):
+#        return theTime.strftime("Yesterday %I:%M %p")
+#    if (deltaDays >0 and deltaDays < 7):
+#        return theTime.strftime("%A %I:%M %p")
+#    else:
+#        return theTime.strftime("%A %d %b %I:%M %p")    
+#    
