@@ -1,3 +1,5 @@
+import hashlib
+
 def plural(num, word):
     # Simplified code based upon:
     # http://code.activestate.com/recipes/82102/
@@ -26,6 +28,9 @@ def formatTimeDelta(delta, weekLabel='week', dayLabel='day', hourLabel='hour', m
 
 def abbreviatedTimeDelta(delta):
     return formatTimeDelta(delta, minLabel='min', secLabel='sec')
+
+def getHash(word):
+    return hashlib.sha224(word).hexdigest()
 
 #def formatTimeWithReference(reference, theTime):
 #    delta = reference.date() - theTime.date()

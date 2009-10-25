@@ -3,7 +3,7 @@ import unittest
 from util import *
 from datetime import timedelta
 
-class ModelTest(unittest.TestCase):     
+class UtilTest(unittest.TestCase):     
     def testPlural(self):
         word = 'word'
         self.assertEqual('0 words', plural(0, word))
