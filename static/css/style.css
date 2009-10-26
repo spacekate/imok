@@ -246,6 +246,20 @@ div.leftpanel table tr.problem td.error {
     background: #c33;
 }
 
+div.leftpanel div.sources h2 {
+    margin-bottom: 5px;
+}
+
+div.leftpanel div.logout {
+    margin-bottom: 1em;
+}
+div.leftpanel div.logout h2 {
+    margin-bottom: 0;
+}
+div.leftpanel div.logout p.note {
+    margin-top: 0;
+}
+
 /**** register styles ****/
 form.register {
     padding: 0 5px 5px 7px;
@@ -650,6 +664,7 @@ input.name { width: 165px; }
 input.email { width: 165px; }
 input.phone { width: 120px; }
 input.price { width: 50px; }
+input.voucher { width: 120px; }
 textarea.comment {
     width: 100%;
     font-size: 1em;

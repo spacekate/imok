@@ -22,7 +22,10 @@
 		{% include "fragments/menu.html" %}
 
         <div class="container">
-		    {% include "fragments/sources.html" %}
+		    <div class="leftpanel">
+                {% include "fragments/login.html" %}
+		        {% include "fragments/sources.html" %}
+            </div>
             {% include "fragments/contacts.html" %}
 
             <div class="content account">
