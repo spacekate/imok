@@ -328,6 +328,7 @@ class RegisterHandler(NotificationHandler):
             return
         try:
             createAccount(username, password, name, email, phone, mobile)
+            self.login(username, password, sucessUrl)            
         except AccountExistsException, e:
             params={
                     'message' : "The username is already in use",
