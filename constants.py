@@ -24,3 +24,9 @@ class Constants():
                  'key': {'id':'fake'}, 
                  'check' : 'fake',
                 }    
+        
+    def passwordsDontMatchError(self):
+        return "The passwords do not match"
+
+    def alphaNum(self):
+        return 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'

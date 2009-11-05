@@ -35,35 +35,30 @@ def notifyCustomer(customer, time):
         alert.closed=True
         alert.put()
 
-def createAccount(username, password, name, email, phone, mobile):
-        passwordHash = getHash(password)
+def createAccount(email, password, name,  phone, mobile):
 
-        accountQuery = Customer.gql("WHERE username = :1 LIMIT 1",
-                                   username)
+        accountQuery = Customer.gql("WHERE email = :1 LIMIT 1",
+                                   email)
         account = accountQuery.get()
         if (not account):
+            passwordSeed = getSeed()
+            passwordHash = getHash(password, passwordSeed)
+
             customer = Customer()
-            customer.username = username
-            customer.passwordHash = passwordHash
-            customer.name = name
             customer.email = email
+            customer.passwordHash = passwordHash
+            customer.passwordSeed = passwordSeed
+            customer.name = name
             customer.timeout=24*60   #24 hours * 60 mins
             customer.phone=phone
             customer.mobile=mobile
             customer.comment=''
-            #customer.notify()
             customer.put()
-            vendorId = "website"
-            deviceId = str(customer.key().id())
-
+            
             # create source record
             createSource(customer)
-#            source = Source()
-#            source.customer=customer
-#            source.vendorId = vendorId
-#            source.deviceId = deviceId
-#            source.put()
-            
+            vendorId = "website"
+            deviceId = str(customer.key().id())
             notify("website", deviceId)
 
         else:

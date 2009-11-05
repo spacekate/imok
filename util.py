@@ -1,4 +1,6 @@
 import hashlib
+import random
+from constants import *
 
 def plural(num, word):
     # Simplified code based upon:
@@ -29,9 +31,21 @@ def formatTimeDelta(delta, weekLabel='week', dayLabel='day', hourLabel='hour', m
 def abbreviatedTimeDelta(delta):
     return formatTimeDelta(delta, minLabel='min', secLabel='sec')
 
-def getHash(word):
-    return hashlib.sha224(word).hexdigest()
+def getHash(word, seed=None):
+    #return hashlib.sha224(word).hexdigest()
+    hash = hashlib.sha512()
+    if seed:
+        hash.update(seed)
+    hash.update(word)
+    return hash.hexdigest()
 
+def getSeed():
+    c=Constants()
+    seed=random.choice(c.alphaNum()) + \
+         random.choice(c.alphaNum()) + \
+         random.choice(c.alphaNum()) + \
+         random.choice(c.alphaNum())
+    return seed
 #def formatTimeWithReference(reference, theTime):
 #    delta = reference.date() - theTime.date()
 #    deltaDays = delta.days
