@@ -14,7 +14,6 @@ import logging
 import random
 import base64
 import Cookie
-import hashlib
 
 from datetime import datetime
 from html2text import html2text
@@ -29,6 +28,9 @@ from google.appengine.api import memcache
 
 from models import *
 from constants import *
+from util import *
+from CustomerLogic import *
+
 
 ### Base Classes
 class RedirectException(Exception):
@@ -46,8 +48,6 @@ class ReqHandler(webapp.RequestHandler):
         except RedirectException, e:
             self.redirect(e.url)
 
-    def getHash(self, word):
-        return hashlib.sha224(word).hexdigest()
 
     def setCookie(self, key, value, expires=Constants().loginCookieExpiry()):
          simpleCookie = Cookie.SimpleCookie()
@@ -70,8 +70,8 @@ class ReqHandler(webapp.RequestHandler):
         self.setCookie('imok-token', '', -99999)
         self.redirect(sucessUrl)
         
-    def login(self, username, password, sucessUrl):    
-        account= self.getAccountFromLogin(username, password)
+    def login(self, email, password, sucessUrl):    
+        account= self.getAccountFromLogin(email, password)
         if (account):
             # create a cookie key
             rnd = random.random()
@@ -85,19 +85,24 @@ class ReqHandler(webapp.RequestHandler):
             self.redirect(sucessUrl)
         else:
             params={
-                    'message' : "The username and password did not match",
+                    'message' : "The email and password did not match",
                     'sucessUrl': sucessUrl,
             }
             url = "/login.html?%s" %(urllib.urlencode(params))
             self.redirect(url)
             
-    def getAccountFromLogin(self, username, password):
-        accountQuery = Customer.gql("WHERE username = :1 LIMIT 1",
-                                   username)
+    def getAccountFromLogin(self, email, password):
+        accountQuery = Customer.gql("WHERE email = :1 LIMIT 1",
+                                   email)
         account = accountQuery.get()
-        passwordHash = self.getHash(password)
-        if (account and passwordHash != account.passwordHash):
-            account = None
+        logging.debug("getAccountFromLogin email: %s"% str(email))
+        if account:
+            passwordHash = getHash(password, account.passwordSeed)
+            if (passwordHash != account.passwordHash):
+                logging.debug("password and password hash did not match")
+                logging.debug("passwordHash: %s" % account.passwordHash)
+                logging.debug("passwordSeed: %s" % account.passwordSeed)
+                account = None
         return account
     def getLoginCookie(self):
         # get the cookie
@@ -153,45 +158,46 @@ class ReqHandler(webapp.RequestHandler):
         account = values.get('account')
         if (account):
             values['logoutLink'] = '/logout/'
-            if account.username =='hamish' or account.username =='spacekate':
-                values['isAdmin'] = True
+#            if account.username =='hamish' or account.username =='spacekate':
+#                values['isAdmin'] = True
         path = os.path.join(os.path.dirname(__file__),'templates', templateName)
         return (template.render(path, values))
 
 ### Save Handlers
 class NotificationHandler(ReqHandler):
-    def notify(self, vendorId, deviceId, customer=None):
-        now = datetime.utcnow()
-        if (customer):
-            self.notifyCustomer(customer, now)
-        else:
-            sourceQuery = Source.gql("WHERE vendorId =:1 and deviceId = :2 ", vendorId, deviceId)
-            sourceResults = sourceQuery.fetch(1)
-            for source in sourceResults:
-                self.notifyCustomer(source.customer, now)
-                customer=source.cutomer
-           
-        notification = Notification()
-        notification.vendorId = vendorId
-        notification.deviceId = deviceId
-        notification.dateTime=now
-        notification.customer=customer
-        notification.put()
-
-    def notifyCustomer(self, customer, time):
-        customer.notify(time)
-        customer.put()
-        alertQuery = Alert.gql("WHERE customer =:1 and closed = :2 LIMIT 1", customer, False)
-        alert = alertQuery.get()
-        if (alert):
-            alert.closed=True
-            alert.put()
+    pass
+#    def notify(self, vendorId, deviceId, customer=None):
+#        now = datetime.utcnow()
+#        if (customer):
+#            self.notifyCustomer(customer, now)
+#        else:
+#            sourceQuery = Source.gql("WHERE vendorId =:1 and deviceId = :2 ", vendorId, deviceId)
+#            sourceResults = sourceQuery.fetch(1)
+#            for source in sourceResults:
+#                self.notifyCustomer(source.customer, now)
+#                customer=source.cutomer
+#           
+#        notification = Notification()
+#        notification.vendorId = vendorId
+#        notification.deviceId = deviceId
+#        notification.dateTime=now
+#        notification.customer=customer
+#        notification.put()
+#
+#    def notifyCustomer(self, customer, time):
+#        customer.notify(time)
+#        customer.put()
+#        alertQuery = Alert.gql("WHERE customer =:1 and closed = :2 LIMIT 1", customer, False)
+#        alert = alertQuery.get()
+#        if (alert):
+#            alert.closed=True
+#            alert.put()
 class WebNotificationHandler(NotificationHandler):
     def process(self):
         customer = self.getAccount()
         logging.debug("Customer: %s" %str(customer))
         deviceId = str(customer.key().id())
-        self.notify("website", deviceId, customer)
+        notify("website", deviceId, customer)
         
         self.redirect('/account.html')
         
@@ -199,7 +205,7 @@ class ExternalNotificationHandler(NotificationHandler):
     def process(self):
         vendorId = self.request.get('vendorId')
         deviceId = self.request.get('deviceId')
-        self.notify(vendorId, deviceId)
+        notify(vendorId, deviceId)
         
         self.redirect('/account.html')
         
@@ -307,57 +313,44 @@ class AlertPageHandler(ReqHandler):
 #            self.template('index.html', {})
 class RegisterHandler(NotificationHandler):
     def process(self):
-        username = self.request.get('username')
+        # username = self.request.get('username')
+        email = self.request.get('email')
+        logging.debug("Register email: %s" % email)
+
         password = self.request.get('password')
         retypePassword = self.request.get('retypePassword')
-        passwordHash = self.getHash(password)
+#        passwordHash = getHash(password)
         name = self.request.get('name')
-        email = self.request.get('email')
         sucessUrl= self.request.get('sucess_url')
         phone = self.request.get('phone')
         mobile = self.request.get('mobile')
 
-        if (not password ==  retypePassword):
+        if (password != retypePassword):
             params={
-                    'message' : "The passwords do not match",
+                    'message' : Constants().passwordsDontMatchError(),
                     'sucessUrl': sucessUrl,
             }
             url = "/register.html?%s" %(urllib.urlencode(params))
             self.redirect(url)
             return
-
-        accountQuery = Customer.gql("WHERE username = :1 LIMIT 1",
-                                   username)
-        account = accountQuery.get()
-        if (not account):
-            customer = Customer()
-            customer.username = username
-            customer.passwordHash = passwordHash
-            customer.name = name
-            customer.email = email
-            customer.timeout=24*60   #24 hours * 60 mins
-            customer.phone=phone
-            customer.mobile=mobile
-            customer.comment=''
-            #customer.notify()
-            customer.put()
-            deviceId = str(customer.key().id())
-            self.notify("website", deviceId, customer)
-            account=customer
-            self.redirect(sucessUrl)
-        else:
+        try:
+            createAccount(email, password, name, phone, mobile)
+            self.login(email, password, sucessUrl)            
+        except AccountExistsException, e:
             params={
-                    'message' : "The username is already in use",
+                    'message' : "The email address has already been registered",
                     'sucessUrl': sucessUrl,
             }
             url = "/register.html?%s" %(urllib.urlencode(params))
             self.redirect(url)
+        self.redirect(sucessUrl)
+
 class LoginHandler(ReqHandler):
     def process(self):
-        username = self.request.get('username')
+        email = self.request.get('email')
         password = self.request.get('password')
         sucessUrl= self.request.get('sucess_url')
-        self.login(username, password, sucessUrl)
+        self.login(email, password, sucessUrl)
 
 class LogoutHandler(ReqHandler):
     def process(self):

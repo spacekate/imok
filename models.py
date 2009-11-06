@@ -10,12 +10,14 @@ END_OF_TIME=datetime.max
 ### Models
 class Customer(db.Model):
     #account = db.UserProperty()
-    username = db.StringProperty()
-    passwordHash= db.StringProperty()
+    #username = db.StringProperty()
+    email = db.EmailProperty()
+    passwordHash = db.StringProperty()
+    passwordSeed = db.StringProperty()
+    status = db.StringProperty(choices=set(["active", "pending"]))
     name = db.StringProperty()
     phone = db.StringProperty()
     mobile = db.StringProperty()
-    email = db.EmailProperty()
     comment = db.StringProperty(multiline=True)
     timeout = db.IntegerProperty()
     creationDate = db.DateTimeProperty(auto_now_add=True)

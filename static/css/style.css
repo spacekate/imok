@@ -42,12 +42,6 @@ h1 {
 	font-size: 1.7em;
 	font-weight: normal;
 }
-div.topbit h1 {
-	margin: 0;
-	padding: 10px 5px;
-	color: #69c;
-	font-size: 2em;
-}
 h1 button {
     font-size: 2em;
     color: #063;
@@ -97,7 +91,11 @@ div.topbit {
 	background: #69c;
 }
 div.topbit h1 {
-	background: #2E5C8A;
+	margin: 0;
+	padding: 2px 5px;
+	color: #69c;
+	font-size: 2em;
+	background: #B3CBE6;
 }
 div.topbit ul {
 	height: 25px;
@@ -665,6 +663,8 @@ input.email { width: 165px; }
 input.phone { width: 120px; }
 input.price { width: 50px; }
 input.voucher { width: 120px; }
+.login input.email,
+.login input.password { width: 140px; }
 textarea.comment {
     width: 100%;
     font-size: 1em;
