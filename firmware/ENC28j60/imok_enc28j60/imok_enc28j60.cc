@@ -6,12 +6,20 @@ static uint8_t myMac[6] = {0x54,0x55,0x58,0x10,0x00,0x24};
 static uint8_t myIp[4] = {10,1,1,55};
 
 // server settings - modify the service ip to your own server
-static uint8_t destIp[4] = {10,1,1,3};
+static uint8_t destIp[4] = {10,1,1,5};
 static uint8_t destMac[6];
 static uint16_t destPort = 8080;
 
 #define BUFFER_SIZE 500
 static uint8_t buf[BUFFER_SIZE+1];
+
+// TCP/IP states as defined by:
+// http://www.tcpipguide.com/free/t_TCPOperationalOverviewandtheTCPFiniteStateMachineF-2.htm
+enum TCP_STATE
+{
+    CLOSED, SYN_SENT, SYN_RECEIVED, ESTABLISHED, CLOSE_WAIT, LAST_ACK, FIN_WAIT_1, FIN_WAIT_2, CLOSING, TIME_WAIT
+};
+static TCP_STATE sate;
 
 enum CLIENT_STATE
 {
