@@ -8,3 +8,7 @@ imok.ipr
 imok.iws
 firmware/ENC28j60/bin/
 firmware/polymer/bin/
+*.o
+*.epp
+*.hex
+*.elf
