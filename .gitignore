@@ -8,7 +8,10 @@ imok.ipr
 imok.iws
 firmware/ENC28j60/bin/
 firmware/polymer/bin/
+firmware/wiznet/monitor_prototype/applet/
 *.o
 *.epp
 *.hex
 *.elf
+*.eep
+*.a
