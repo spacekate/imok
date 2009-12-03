@@ -166,32 +166,7 @@ class ReqHandler(webapp.RequestHandler):
 ### Save Handlers
 class NotificationHandler(ReqHandler):
     pass
-#    def notify(self, vendorId, deviceId, customer=None):
-#        now = datetime.utcnow()
-#        if (customer):
-#            self.notifyCustomer(customer, now)
-#        else:
-#            sourceQuery = Source.gql("WHERE vendorId =:1 and deviceId = :2 ", vendorId, deviceId)
-#            sourceResults = sourceQuery.fetch(1)
-#            for source in sourceResults:
-#                self.notifyCustomer(source.customer, now)
-#                customer=source.cutomer
-#           
-#        notification = Notification()
-#        notification.vendorId = vendorId
-#        notification.deviceId = deviceId
-#        notification.dateTime=now
-#        notification.customer=customer
-#        notification.put()
-#
-#    def notifyCustomer(self, customer, time):
-#        customer.notify(time)
-#        customer.put()
-#        alertQuery = Alert.gql("WHERE customer =:1 and closed = :2 LIMIT 1", customer, False)
-#        alert = alertQuery.get()
-#        if (alert):
-#            alert.closed=True
-#            alert.put()
+
 class WebNotificationHandler(NotificationHandler):
     def process(self):
         customer = self.getAccount()
@@ -205,10 +180,15 @@ class ExternalNotificationHandler(NotificationHandler):
     def process(self):
         vendorId = self.request.get('vendorId')
         deviceId = self.request.get('deviceId')
-        notify(vendorId, deviceId)
+        result = notify(vendorId, deviceId)
+        values = {
+                  'vendorId': vendorId,
+                  'deviceId': deviceId,
+                  'Result'  : result,
+                  }
+        self.template("external_notification_responce.txt", values)
         
-        self.redirect('/account.html')
-        
+
 class SaveSettingsHandler(ReqHandler):
     def process(self):
         customer = self.getAccount()
@@ -305,6 +285,7 @@ class AlertPageHandler(ReqHandler):
             self.template('alert_not_found.html', {})
 
 
+        
 #class FrontPageHandler(ReqHandler):
 #    def process(self):
 #        if (users.get_current_user()):
@@ -356,7 +337,29 @@ class LogoutHandler(ReqHandler):
     def process(self):
         sucessUrl= self.request.get('sucess_url', '/index.html')
         self.logout(sucessUrl)
+
+class AdminHandler(ReqHandler):
+    def process(self):
+        email = self.request.get('email')
+        values={}
+        values['isAdmin'] = True
+        self.template('adminDashboard.html', values)
         
+class AdminButtonRegistrationHandler(ReqHandler):
+    def process(self):
+        email = self.request.get('email')
+        vendorId = self.request.get('vendorId')
+        deviceId = self.request.get('deviceId')
+        accountQuery = Customer.gql("WHERE email = :1 LIMIT 1",
+                                   email)
+        account = accountQuery.get()
+        if (account):
+            source=Source()
+            source.customer = account
+            source.vendorId=vendorId
+            source.deviceId=deviceId
+            source.put()
+        self.redirect('/admin/')
 
 class FallbackHandler(ReqHandler):
     def process(self):
@@ -411,6 +414,8 @@ def main():
                    ('/logout/', LogoutHandler),
                    ('/register/', RegisterHandler),
                    ('/notification/', ExternalNotificationHandler),
+                   ('/admin/registerButton/', AdminButtonRegistrationHandler),
+                   ('/admin/', AdminHandler),
                    ('.*', FallbackHandler),
                   ]
           )

@@ -1,0 +1,3 @@
+vendorId: {{vendorId}}
+deviceId: {{deviceId}}
+Result  : {{Result}}

@@ -15,5 +15,10 @@ class Polymer
 	private:
 		void blinkEthernetLeds();
 		void initEthernetLeds();
+		
+		uint8_t packetTypeIsARP(uint16_t plen);
+		
+		void handlePacket(uint16_t plen);
+		void handleArpPacket(uint16_t plen);
 };
 #endif

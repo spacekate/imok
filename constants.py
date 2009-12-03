@@ -4,7 +4,7 @@ class Constants():
     def loginCookieExpiry(self):
         return 60*60*24*14
     def domain(self):
-        domain = os.environ['HTTP_HOST']
+        domain = os.environ.get('HTTP_HOST','')
         if (not domain):
             domain = "imok.currie.com.au"
         return domain

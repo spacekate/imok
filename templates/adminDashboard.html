@@ -7,10 +7,35 @@
 
 	</head>
 	<body>
-
+	{% if isAdmin %}
 		{% include "fragments/menu.html" %}
-
 		<div class="content">
+		
+		Tools:
+		<ul>
+	        <li><a href="/worker/">Worker</a></li>
+	        <li><a href="/_ah/admin/datastore">DataViewer</a>
+		</ul>
+		
+		
+
+    		
+		<form action="/admin/registerButton/" >
+		
+	    Add ID to User:
+		<input type=text name="email" />
+
+		<select name="vendorId"> 
+            <option value="button" selected >button</option>
+        </select>
+
+		<input type=text name="deviceId" />
+		
+        <input type="submit" value="save" />
+
+		</form>
+		 
+		<hr />
 		<form action="/notification/">
         
 		<select name="vendorId"> 
@@ -24,12 +49,16 @@
             <option value="c" >c</option>
             <option value="d" >d</option>
         </select>
-        <input type="submit" />
+        <input type="submit" value="Press Button"/>
 		
 		</form>
 
 		</div>
 
 		{% include "fragments/footer.html" %}
+    {% else %}
+        Admin login required. Please visit the <a href="/">Home Page</a>.
+    {% endif %}
+
 	</body>
 </html>
