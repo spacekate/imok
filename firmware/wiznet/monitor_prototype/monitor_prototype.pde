@@ -8,6 +8,10 @@
 
 const int buttonPin = 2;     // the number of the pushbutton pin
 
+const int RED_LED = 5;
+const int GREEN_LED = 6;
+const int YELLOW_LED = 7;
+
 // Variables will change:
 int buttonState;             // the current reading from the input pin
 int lastButtonState = LOW;   // the previous reading from the input pin
@@ -29,6 +33,10 @@ Client client(serverIp, 8080);
 
 void setup()
 {
+  pinMode(RED_LED, OUTPUT);
+  pinMode(GREEN_LED, OUTPUT);
+  pinMode(YELLOW_LED, OUTPUT);
+  
   Serial.begin(9600);
   Serial.println("getting mac...");
   setMac();
@@ -77,6 +85,8 @@ void loop()
       Serial.println("disconnecting.");
       client.stop();
       sending=0;
+      digitalWrite(YELLOW_LED, LOW);      
+      digitalWrite(GREEN_LED, HIGH);      
     }
   }
   // read the state of the switch into a local variable:
@@ -88,19 +98,28 @@ void loop()
       lastButtonState = reading;
       if (millis() - lastconnectionTime > connectionTimeout){
         doGet();
+
       }
       lastconnectionTime = millis();
   } //else{
     //Serial.println("same");
   //}
   //delay(300);
+  if (millis() - lastconnectionTime > connectionTimeout){
+      //digitalWrite(RED_LED, LOW);
+      digitalWrite(GREEN_LED, LOW);
+      digitalWrite(YELLOW_LED, LOW);
+  }
+
 }
 
 void doGet(){
     byte buffer[6];
     Dhcp.getMacAddress(buffer);
     Serial.println("connecting...");
-
+    digitalWrite(RED_LED, LOW);
+    digitalWrite(GREEN_LED, LOW);
+    digitalWrite(YELLOW_LED, HIGH);
     if (client.connect()) {
       sending=1;
       Serial.println("connected");
@@ -113,6 +132,10 @@ void doGet(){
     } else {
       sending=0;
       Serial.println("connection failed");
+
+      digitalWrite(YELLOW_LED, LOW);
+      digitalWrite(RED_LED, HIGH);
+
     }
 }
 
