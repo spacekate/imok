@@ -9,8 +9,8 @@
 const int buttonPin = 2;     // the number of the pushbutton pin
 
 const int RED_LED = 5;
-const int GREEN_LED = 6;
-const int YELLOW_LED = 7;
+const int GREEN_LED = 7;
+const int YELLOW_LED = 8;
 
 // Variables will change:
 int buttonState;             // the current reading from the input pin
@@ -23,13 +23,19 @@ long lastconnectionTime = 0;  // the last time the output pin was toggled
 long connectionTimeout = 5000;    // the debounce time; increase if the output flickers
 
 
-byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-byte serverIp[] = { 10, 1, 1, 2 };
-char serverName[] = "localhost";
+//byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+byte mac[] = { 0x00, 0x40, 0xf4, 0xc0, 0x33, 0x8c};
+//byte serverIp[] = { 10, 1, 1, 2 };
+//char serverName[] = "localhost";
+//int serverPort = 8080;
+
+byte serverIp[] = { 74, 125, 47, 121 };
+char serverName[] = "www.okay2day.com";
+int serverPort = 80;
 
 boolean ipAcquired = false;
 
-Client client(serverIp, 8080);
+Client client(serverIp, serverPort);
 
 void setup()
 {
@@ -123,11 +129,21 @@ void doGet(){
     if (client.connect()) {
       sending=1;
       Serial.println("connected");
+      
       client.print("GET /notification/?vendorId=button&deviceId=");
       printArray(&client, ":", buffer, 6, 16);
       client.println(" HTTP/1.1");
+      
       client.print("Host: ");
       client.println(serverName);
+      
+      client.println("User-Agent: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.1.5) Gecko/20091109 Ubuntu/9.10 (karmic) Firefox/3.5.5");
+      client.println("Accept: text/html");
+      client.println("Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7");      
+      client.println("Accept-Language: en-us,en;q=0.5");
+      client.println("Accept-Encoding: gzip,deflate");
+      client.println("Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7");
+
       client.println();
     } else {
       sending=0;
