@@ -3,7 +3,7 @@ import unittest
 from util import *
 from CustomerLogic import *
 
-class CustomerLogicTest(unittest.TestCase):     
+class CustomerLogicTest(unittest.TestCase):
     def testCreate(self):
         createAccount('e@currie.to', 'p', 'n', 'ph', 'mob')
         try:
